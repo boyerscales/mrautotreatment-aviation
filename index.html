@@ -1226,7 +1226,7 @@ function toast(html, ms=6000){
 
 /* ------------------------- walkaround: fallback + nav ------------------------- */
 // Bump when tour.js changes so browsers fetch the new one instead of a cached copy.
-const TOUR_VERSION = '34';
+const TOUR_VERSION = '35';
 (function tourShell(){
   const tour = $('#tour');
   const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (_) { return false; } })();

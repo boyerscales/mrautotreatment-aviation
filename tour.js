@@ -171,7 +171,9 @@ async function start(){
   const woodM  = M({ map:woodTex, roughness:.3, clearcoat:1, clearcoatRoughness:.08 });
   const carpetM= M({ map:carpetTex, roughness:1 });
   const stone  = M({ color:0xf2efe9, roughness:.12, clearcoat:1 });
-  const decal  = (map) => M({ map, transparent:true, roughness:.25, clearcoat:1, polygonOffset:true, polygonOffsetFactor:-2, polygonOffsetUnits:-2 });
+  // Decals: their empty parts must not write depth, or they punch a see-through box in the
+  // (transparent, later-drawn) hull. alphaTest drops the empty pixels; they draw after the hull.
+  const decal  = (map) => M({ map, transparent:true, alphaTest:.35, depthWrite:false, roughness:.25, clearcoat:1, polygonOffset:true, polygonOffsetFactor:-2, polygonOffsetUnits:-2 });
 
   const jet = new THREE.Group(); scene.add(jet);
   const edgeMeshes = [];
@@ -216,7 +218,7 @@ async function start(){
   const regTex = textTex('N633AS', 1024, 180, '#141414');
   for (const side of [1, -1]){
     const y = .34, z = side * (Math.sqrt(1.1 * 1.1 - y * y) + .014);
-    const r = add(new THREE.PlaneGeometry(1.7, .3), decal(regTex)); r.position.set(-2.9, y, z); r.lookAt(V(-2.9, y * 2, z * 2));
+    const r = add(new THREE.PlaneGeometry(1.7, .3), decal(regTex)); r.position.set(-2.9, y, z); r.lookAt(V(-2.9, y * 2, z * 2)); r.renderOrder = 2;
   }
 
   /* ---------------- wings, winglets, tail ---------------- */
@@ -245,7 +247,7 @@ async function start(){
   const fin = add(extrude([[-6.4,.5],[-9.15,4.35],[-10.8,4.35],[-9.75,.5]], .16, .04), finM, jet, true);
   fin.geometry.translate(0, 0, -.08);
   for (const side of [1, -1]){
-    const d = add(new THREE.PlaneGeometry(1.5, 1.5), decal(markTex)); d.position.set(-9.15, 2.45, side * .126);
+    const d = add(new THREE.PlaneGeometry(1.5, 1.5), decal(markTex)); d.position.set(-9.15, 2.45, side * .126); d.renderOrder = 2;
     if (side < 0) d.rotation.y = Math.PI;
   }
   const stabGeo = extrude([[-9.1,0],[-10.3,3.3],[-11.0,3.3],[-10.85,0]], .1, .03); stabGeo.rotateX(Math.PI / 2);
