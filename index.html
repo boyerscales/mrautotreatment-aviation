@@ -673,7 +673,7 @@ input[type=datetime-local].inp{color-scheme:dark}
       <div class="wrap">
         <div class="t-head"><span class="eye">The walkaround</span><span class="t-count" id="tCount"><b>01</b> / 09</span></div>
         <div class="cards">
-          <article class="tcard on"><span class="tn">01 · OVERVIEW</span><h3>Every inch, nose to tail</h3><p>Scroll to walk around the aircraft and see exactly what we do at each stop.</p><span class="hint"><i></i>SCROLL</span></article>
+          <article class="tcard on"><span class="tn">01 · OVERVIEW</span><h3>Every inch, nose to tail</h3><p>Keep scrolling to build it, then walk around it and see exactly what we do at each stop.</p><span class="hint"><i></i>SCROLL TO BUILD</span></article>
           <article class="tcard"><span class="tn">02 · NOSE</span><h3>Nose and radome</h3><p>Bugs and ramp film come off the nose first, with a waterless wash that's safe on the paint and the radome.</p></article>
           <article class="tcard"><span class="tn">03 · WINDSCREEN</span><h3>Windscreen and windows</h3><p>They're acrylic, so we only use acrylic-safe cleaners and clean microfiber. No haze, no scratches.</p></article>
           <article class="tcard"><span class="tn">04 · WINGS</span><h3>Leading edges</h3><p>Bug strikes come off the leading edges, and the brightwork gets polished back to a mirror.</p></article>
@@ -1226,7 +1226,7 @@ function toast(html, ms=6000){
 
 /* ------------------------- walkaround: fallback + nav ------------------------- */
 // Bump when tour.js changes so browsers fetch the new one instead of a cached copy.
-const TOUR_VERSION = '32';
+const TOUR_VERSION = '33';
 (function tourShell(){
   const tour = $('#tour');
   const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (_) { return false; } })();

@@ -34,9 +34,11 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 
 // How much scroll each leg of the tour gets. Leg 4 (leaving the square foot) is longer
 // because the cleaning plays out on it. Shared with index.html so the stop list jumps right.
-const LEG = [1, 1, 1, 1, 1.8, 1, 1, 1.15];
+const LEG = [1.9, 1, 1, 1, 1.8, 1, 1, 1.15];   // leg 0 is long: the build plays out on it
 const CUM = [0]; { const sum = LEG.reduce((a, b) => a + b, 0); LEG.forEach(w => CUM.push(CUM[CUM.length - 1] + w / sum)); }
-window.__tourStopP = CUM.map((c, i) => i === 0 ? .01 : c);
+// The overview stop sits where the build finishes, so jumping to it shows the finished jet.
+const BUILD_END = .55;
+window.__tourStopP = CUM.map((c, i) => i === 0 ? CUM[0] + (CUM[1] - CUM[0]) * BUILD_END : c);
 
 if (!root.classList.contains('static')) start().catch(e => { console.error(e); root.classList.add('static'); });
 
@@ -531,29 +533,33 @@ async function start(){
     const r = root.getBoundingClientRect(), span = Math.max(1, r.height - innerHeight);
     if (introAt === null && r.top < innerHeight * .95) introAt = now;
 
-    // intro: lines draw in, then a ring of light sweeps the solid in, nose to tail.
-    // The camera swings round while it happens, so there's motion before any scrolling.
+    // damped scroll
+    const pRaw = clamp(-r.top / span, 0, 1);
+    if (pSm === null || REDUCED || REDUCED_SNAP.on) pSm = pRaw;
+    const pPrev = pSm; pSm = damp(pSm, pRaw, 4.5, dt);
+    const vel = (pSm - pPrev) / Math.max(dt, 1e-3);
+    const [i, f] = legOf(pSm);
+
+    // The build, driven by scroll. The gold lines start drawing on their own as soon as the
+    // section shows up (motion before anyone scrolls); from there the first stretch of scroll
+    // sweeps the jet solid, nose to tail, while the camera circles it. The camera doesn't head
+    // for the nose until the jet is 100% built, and scrolling back up un-builds it.
     const T = introAt === null ? 0 : (now - introAt) / 1000;
-    const drawK = REDUCED ? 1 : clamp(T / 2.4, 0, 1);
-    const reveal = REDUCED ? 1 : smooth(clamp((T - 1.9) / 1.8, 0, 1));
-    const swing = REDUCED ? 0 : 1 - easeOut(clamp(T / 4.2, 0, 1));
+    const build = REDUCED ? 1 : i > 0 ? 1 : clamp(f / BUILD_END, 0, 1);
+    const drawK = REDUCED ? 1 : clamp(Math.max(T / 1.8, build / .3), 0, 1);
+    const reveal = REDUCED ? 1 : smooth(clamp((build - .25) / .75, 0, 1));
+    const swing = REDUCED ? 0 : 1 - easeOut(build);
     lineGeo.setDrawRange(0, Math.floor(drawK * totalVerts / 2) * 2);
     const cx = 11.2 - reveal * 23.6;
     cut.value = cx;
     scan.position.x = cx; scan.scale.setScalar((rad(10 - cx) || .3) / 1.1 + .06);
     scan.material.opacity = reveal > 0 && reveal < 1 ? Math.sin(reveal * Math.PI) : 0;
 
-    // damped scroll
-    const pRaw = clamp(-r.top / span, 0, 1);
-    if (pSm === null || REDUCED || REDUCED_SNAP.on) pSm = pRaw;
-    const pPrev = pSm; pSm = damp(pSm, pRaw, 4.5, dt);
-    const vel = (pSm - pPrev) / Math.max(dt, 1e-3);
-
     // never a dead stop: legs ease through their stops instead of parking on them.
-    // The square-foot leg holds the camera on the wing (with a slow orbit) while it cleans.
-    const [i, f] = legOf(pSm);
+    // The square-foot leg holds the camera on the tail (with a slow orbit) while it cleans.
     let cu, sub = i > 4 ? 1 : 0, hold = 0;
-    if (i === 4){
+    if (i === 0) cu = easeIO(clamp((f - BUILD_END) / (1 - BUILD_END), 0, 1));
+    else if (i === 4){
       if (f < .66){ hold = f / .66; cu = 4; sub = hold; }
       else { cu = 4 + easeIO((f - .66) / .34); sub = 1; hold = 1; }
     } else cu = i + f - .78 * Math.sin(2 * Math.PI * f) / (2 * Math.PI);
