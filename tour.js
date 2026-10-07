@@ -34,10 +34,10 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 
 // How much scroll each leg of the tour gets. Leg 4 (leaving the square foot) is longer
 // because the cleaning plays out on it. Shared with index.html so the stop list jumps right.
-const LEG = [1.9, 1, 1, 1, 1.8, 1, 1, 1.15];   // leg 0 is long: the build plays out on it
+const LEG = [2.8, 1, 1, 1, 1.8, 1, 1, 1.15];   // leg 0 is long: the build plays out on it
 const CUM = [0]; { const sum = LEG.reduce((a, b) => a + b, 0); LEG.forEach(w => CUM.push(CUM[CUM.length - 1] + w / sum)); }
 // The overview stop sits where the build finishes, so jumping to it shows the finished jet.
-const BUILD_END = .55;
+const BUILD_END = .66;
 window.__tourStopP = CUM.map((c, i) => i === 0 ? CUM[0] + (CUM[1] - CUM[0]) * BUILD_END : c);
 
 if (!root.classList.contains('static')) start().catch(e => { console.error(e); root.classList.add('static'); });
@@ -523,7 +523,7 @@ async function start(){
 
   const P0 = new THREE.Vector3(), T0 = new THREE.Vector3(), camP = new THREE.Vector3(), camT = new THREE.Vector3();
   const off3 = new THREE.Vector3(), fwd = new THREE.Vector3(), right = new THREE.Vector3(), upv = new THREE.Vector3(), UP = V(0, 1, 0), proj = new THREE.Vector3();
-  let active = -1, pSm = null, fovKick = 0, camInit = false;
+  let active = -1, pSm = null, camInit = false;
   const legOf = p => { for (let i = 0; i < LEG.length; i++) if (p <= CUM[i + 1] || i === LEG.length - 1) return [i, clamp((p - CUM[i]) / (CUM[i + 1] - CUM[i]), 0, 1)]; };
 
   function frame(now){
@@ -536,8 +536,7 @@ async function start(){
     // damped scroll
     const pRaw = clamp(-r.top / span, 0, 1);
     if (pSm === null || REDUCED || REDUCED_SNAP.on) pSm = pRaw;
-    const pPrev = pSm; pSm = damp(pSm, pRaw, 4.5, dt);
-    const vel = (pSm - pPrev) / Math.max(dt, 1e-3);
+    pSm = damp(pSm, pRaw, 4.5, dt);
     const [i, f] = legOf(pSm);
 
     // The build, driven by scroll. The gold lines start drawing on their own as soon as the
@@ -595,8 +594,7 @@ async function start(){
     camera.position.copy(camP); camera.lookAt(camT);
     const nearWanted = clamp(camP.distanceTo(camT) * .02, .01, .4);
     if (Math.abs(camera.near - nearWanted) > .002){ camera.near = nearWanted; camera.updateProjectionMatrix(); }
-    fovKick = damp(fovKick, REDUCED ? 0 : clamp(Math.abs(vel) * 9, 0, 5), 4, dt);
-    const fov = (portrait ? 52 : 36) + fovKick;
+    const fov = portrait ? 52 : 36;
     if (Math.abs(camera.fov - fov) > .01){ camera.fov = fov; camera.updateProjectionMatrix(); }
 
     // life: lights blink, fans turn, dust drifts

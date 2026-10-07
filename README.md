@@ -71,7 +71,7 @@ out anything that would be a false claim for him:
   - *Always moving.* Scroll, camera, target and mouse all run through frame-rate independent
     damping; the camera only slows near a stop, never parks; the first scroll moves it. Before
     anyone scrolls, the jet draws itself in gold lines while the camera swings around it, then a
-    ring of light sweeps it solid. Fast scrolling widens the lens a touch. Nav and wing lights,
+    ring of light sweeps it solid as you scroll (about a screen and a half of scroll). No lens changes, only camera glides, so nothing pumps in and out. Nav and wing lights,
     strobes and beacons blink, the fans turn, dust drifts.
   - *Detail.* Livery painted on the fuselage (white top, black belly, gold pinstripes, panel lines
     with a slight bump, main door, over-wing exit), black tail with his emblem, registration

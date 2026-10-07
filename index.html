@@ -173,7 +173,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 }
 
 /* ---------- 3D walkaround ---------- */
-.tour{position:relative;height:calc(100svh + 8 * 88svh);background:#000}
+.tour{position:relative;height:calc(100svh + 9 * 88svh);background:#000}
 .tour-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .tour-sticky::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.55) 100%);z-index:1}
 .tour-ui,.hot,.t-bar,.tour-load{z-index:2}
@@ -222,7 +222,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 @keyframes load{from{background-position:100% 0}to{background-position:-100% 0}}
 .tour.ready .tour-load{opacity:0}
 @media (max-width:859px){
-  .tour{height:calc(100svh + 8 * 78svh)}
+  .tour{height:calc(100svh + 9 * 78svh)}
   .t-head{top:calc(var(--hdr) + 14px)}
   .tcard{left:0;right:0;width:auto;bottom:calc(86px + env(safe-area-inset-bottom));padding:18px 18px 16px;border-radius:18px}
   .tcard h3{margin:8px 0 6px}
@@ -1226,7 +1226,7 @@ function toast(html, ms=6000){
 
 /* ------------------------- walkaround: fallback + nav ------------------------- */
 // Bump when tour.js changes so browsers fetch the new one instead of a cached copy.
-const TOUR_VERSION = '33';
+const TOUR_VERSION = '34';
 (function tourShell(){
   const tour = $('#tour');
   const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (_) { return false; } })();
