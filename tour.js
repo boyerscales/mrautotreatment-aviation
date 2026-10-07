@@ -58,7 +58,7 @@ async function start(){
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
   scene.environmentIntensity = .75;
-  const camera = new THREE.PerspectiveCamera(36, 1, .01, 220);
+  const camera = new THREE.PerspectiveCamera(36, 1, .01, 260);
 
   const key = new THREE.DirectionalLight(0xffe2b4, 1.8); key.position.set(8, 12, 7); scene.add(key);
   const rim = new THREE.DirectionalLight(0xc6d6ff, 1.1); rim.position.set(-12, 5, -9); scene.add(rim);
@@ -394,26 +394,36 @@ async function start(){
   }
   macro(0);
 
-  /* ---------------- floor: dark gloss, rings, contact shadow, dust ---------------- */
+  /* ---------------- floor and dust ---------------- */
   const FY = -2.66;
-  {
-    const fl = new THREE.Mesh(new THREE.CircleGeometry(160, 64), new THREE.MeshStandardMaterial({ color:0x050505, roughness:.85, metalness:0, envMapIntensity:0 }));
-    fl.rotation.x = -Math.PI / 2; fl.position.y = FY; scene.add(fl);
-  }
-  const ringTex = canvasTex(1024, 1024, (g) => {
-    const r = g.createRadialGradient(512, 512, 0, 512, 512, 512);
-    r.addColorStop(0, 'rgba(224,180,92,.14)'); r.addColorStop(.5, 'rgba(224,180,92,.03)'); r.addColorStop(1, 'rgba(224,180,92,0)');
-    g.fillStyle = r; g.fillRect(0, 0, 1024, 1024);
-    g.strokeStyle = 'rgba(224,180,92,.24)'; g.lineWidth = 1.5;
-    for (const rr of [250, 360, 470]){ g.beginPath(); g.arc(512, 512, rr, 0, 7); g.stroke(); }
-    g.setLineDash([6, 14]); g.strokeStyle = 'rgba(224,180,92,.16)';
-    for (let a = 0; a < 12; a++){ const c = Math.cos(a / 12 * Math.PI * 2), s = Math.sin(a / 12 * Math.PI * 2); g.beginPath(); g.moveTo(512 + c * 250, 512 + s * 250); g.lineTo(512 + c * 470, 512 + s * 470); g.stroke(); }
+  // ONE floor surface. The rings, warm glow and contact shadow are painted into its texture
+  // instead of being separate layers a hair apart: stacked coplanar layers z-fight and
+  // flicker when the camera swoops low (between the overview and the nose).
+  const FR = 40;
+  const floorTex = canvasTex(2048, 2048, (g) => {
+    const C2 = 1024, px = C2 / FR;                         // pixels per world unit
+    g.fillStyle = '#060606'; g.fillRect(0, 0, 2048, 2048);
+    let r = g.createRadialGradient(C2, C2, 0, C2, C2, 17 * px);
+    r.addColorStop(0, 'rgba(224,180,92,.16)'); r.addColorStop(.5, 'rgba(224,180,92,.05)'); r.addColorStop(1, 'rgba(224,180,92,0)');
+    g.fillStyle = r; g.fillRect(0, 0, 2048, 2048);
+    // contact shadow under the jet: a soft ellipse, long along the fuselage
+    g.save(); g.translate(C2 - .5 * px, C2); g.scale(13 * px, 6 * px);
+    r = g.createRadialGradient(0, 0, 0, 0, 0, 1); r.addColorStop(0, 'rgba(0,0,0,.85)'); r.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = r; g.beginPath(); g.arc(0, 0, 1, 0, 7); g.fill(); g.restore();
+    g.strokeStyle = 'rgba(224,180,92,.34)'; g.lineWidth = 3;
+    for (const rr of [8.3, 12, 15.7]){ g.beginPath(); g.arc(C2, C2, rr * px, 0, 7); g.stroke(); }
+    g.setLineDash([10, 22]); g.strokeStyle = 'rgba(224,180,92,.22)'; g.lineWidth = 2.5;
+    for (let a = 0; a < 12; a++){ const c = Math.cos(a / 12 * Math.PI * 2), sn = Math.sin(a / 12 * Math.PI * 2); g.beginPath(); g.moveTo(C2 + c * 8.3 * px, C2 + sn * 8.3 * px); g.lineTo(C2 + c * 15.7 * px, C2 + sn * 15.7 * px); g.stroke(); }
+    // fade the disc's edge into the outer floor color so there's no seam
+    r = g.createRadialGradient(C2, C2, .8 * C2, C2, C2, C2); r.addColorStop(0, 'rgba(6,6,6,0)'); r.addColorStop(1, 'rgba(6,6,6,1)');
+    g.fillStyle = r; g.fillRect(0, 0, 2048, 2048);
   });
-  const rings = new THREE.Mesh(new THREE.CircleGeometry(17, 72), new THREE.MeshBasicMaterial({ map:ringTex, transparent:true, depthWrite:false }));
-  rings.rotation.x = -Math.PI / 2; rings.position.y = FY + .004; scene.add(rings);
-  const shadowTex = canvasTex(512, 512, (g) => { const r = g.createRadialGradient(256, 256, 0, 256, 256, 256); r.addColorStop(0, 'rgba(0,0,0,.85)'); r.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = r; g.fillRect(0, 0, 512, 512); });
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(26, 12), new THREE.MeshBasicMaterial({ map:shadowTex, transparent:true, depthWrite:false, opacity:0 }));
-  shadow.rotation.x = -Math.PI / 2; shadow.position.set(-.5, FY + .006, 0); scene.add(shadow);
+  {
+    const inner = new THREE.Mesh(new THREE.CircleGeometry(FR, 96), new THREE.MeshBasicMaterial({ map:floorTex }));
+    inner.rotation.x = -Math.PI / 2; inner.position.y = FY; scene.add(inner);
+    const outer = new THREE.Mesh(new THREE.RingGeometry(FR, 220, 96), new THREE.MeshBasicMaterial({ color:0x060606 }));
+    outer.rotation.x = -Math.PI / 2; outer.position.y = FY; scene.add(outer);
+  }
   const DUST = LITE ? 150 : 340;
   const dustPos = new Float32Array(DUST * 3), dustSeed = new Float32Array(DUST);
   for (let i = 0; i < DUST; i++){ dustPos[i*3] = rnd(-16, 16); dustPos[i*3+1] = rnd(FY, 8); dustPos[i*3+2] = rnd(-13, 13); dustSeed[i] = Math.random(); }
@@ -532,7 +542,6 @@ async function start(){
     cut.value = cx;
     scan.position.x = cx; scan.scale.setScalar((rad(10 - cx) || .3) / 1.1 + .06);
     scan.material.opacity = reveal > 0 && reveal < 1 ? Math.sin(reveal * Math.PI) : 0;
-    shadow.material.opacity = reveal * .9;
 
     // damped scroll
     const pRaw = clamp(-r.top / span, 0, 1);
@@ -578,6 +587,8 @@ async function start(){
     camP.x = damp(camP.x, P0.x, 7, dt); camP.y = damp(camP.y, P0.y, 7, dt); camP.z = damp(camP.z, P0.z, 7, dt);
     camT.x = damp(camT.x, T0.x, 7, dt); camT.y = damp(camT.y, T0.y, 7, dt); camT.z = damp(camT.z, T0.z, 7, dt);
     camera.position.copy(camP); camera.lookAt(camT);
+    const nearWanted = clamp(camP.distanceTo(camT) * .02, .01, .4);
+    if (Math.abs(camera.near - nearWanted) > .002){ camera.near = nearWanted; camera.updateProjectionMatrix(); }
     fovKick = damp(fovKick, REDUCED ? 0 : clamp(Math.abs(vel) * 9, 0, 5), 4, dt);
     const fov = (portrait ? 52 : 36) + fovKick;
     if (Math.abs(camera.fov - fov) > .01){ camera.fov = fov; camera.updateProjectionMatrix(); }
