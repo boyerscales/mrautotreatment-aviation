@@ -40,9 +40,11 @@ out anything that would be a false claim for him:
   solid and everything outside it keeps only its own light, so the glow, wing tips and lettering
   float on real transparency. Web copies: `logo-1100.webp` (hero), `logo-560.webp` (finale),
   `logo-180.png` (home-screen icon), `og.jpg` (link previews).
-- **Header mark:** `#mark` in the page's SVG sprite, also `assets/mark.svg` (favicon). It's a flat
-  redraw of his logo (ring, cross, jet head-on, swoosh) because the full logo is unreadable at 40px.
-  The wordmark next to it is live text in Cinzel, the Roman capitals his logo uses.
+- **Header mark:** `#mark` in the page's SVG sprite, also `assets/mark.svg` (favicon). A detailed
+  redraw of his logo made to stay crisp at 44px: dark sky disc, light rays and glow, beveled gold
+  cross, silver jet head-on with gold-ringed engines, gold and silver swoosh, double gold ring.
+  Beside it the wordmark is set like his logo: metallic gold "Anointed", silver "Suds", and
+  "— AVIATION DETAILING —" under it.
 - **Photos:** Unsplash, free under the Unsplash License (commercial use OK, no credit required),
   loaded from images.unsplash.com in the size each screen needs. No faces.
   - Hero background (jet tail against the sun): https://unsplash.com/photos/silhouette-of-airplane-pz7vx75iMx0
@@ -55,24 +57,49 @@ out anything that would be a false claim for him:
 - **Airports:** 8 public fields around Sacramento until his list arrives (`CFG.AIRPORTS`, with
   rough map positions).
 
-## Design (revised 2026-10-07 after Elijah's review)
-- **Modern, not 90s.** No metallic gradient type, no sunburst. Manrope for everything, Instrument
-  Serif italic for the gold accent words, IBM Plex Mono for codes and labels, Cinzel only in the
-  wordmark. Gold buttons have a soft two-tone fill (the one gradient on the page), a light glint
-  that passes every few seconds, lean toward the mouse on desktop, and pop a little burst of
-  suds and gold sparks wherever they're tapped.
-- **Hero:** the golden-hour photo with his logo sitting on the sun, slow zoom-in on load, moves
-  slightly with the mouse, bubbles rising behind the logo.
-- **The walkaround (`tour.js`)** is the centerpiece. A business jet built in three.js from code
-  (no model file, not any one real aircraft). It draws itself in gold lines nose to tail, like the
-  line-drawing jet from the first draft he liked, then a ring of light sweeps down it and it turns
-  solid. Scrolling flies the camera through 9 stops, each with a card: overview, nose, windscreen,
-  leading edges, **one square foot** (zooms onto the wing: grime wiped off, polish sheen, water
-  beads after the coating, with Lift / Polish / Protect filling in), engines, gear, the cabin
-  (hull goes x-ray, seats and carpet inside), and a wrap-up with Book and Call. A "Skip the
-  walkaround" button is always there, and the stop list on desktop jumps to any stop.
-  three.js loads from jsDelivr. With no WebGL, or if it can't load, the stops show as plain cards.
-- **Airport map** is flat now, every pin is a real button, and tapping one selects it in the form.
+## Design (revised twice on 2026-10-07 after Elijah's reviews)
+- **Modern, not 90s.** No metallic gradient type in headlines, no sunburst. Manrope for
+  everything, Instrument Serif italic for gold accent words, IBM Plex Mono for codes and labels,
+  Cinzel only in the wordmark.
+- **Buttons:** gold ones are a soft metal fill with an inner bevel and a dark icon disc; glass ones
+  have a blurred pane, a gold-to-clear hairline border and a gold icon disc. Labels roll up on
+  hover, icons tip, a glint crosses the gold ones every few seconds, they lean toward the mouse,
+  and a tap pops a little burst of suds and gold sparks. The phone bar's three buttons are equal.
+- **Hero:** golden-hour photo with his logo on the sun. The logo has no CSS filter on it (a
+  drop-shadow on a 3D-transformed layer drew a dark haze behind it while the page loaded).
+- **The walkaround (`tour.js`)**, built the way award-winning scroll sites are:
+  - *Always moving.* Scroll, camera, target and mouse all run through frame-rate independent
+    damping; the camera only slows near a stop, never parks; the first scroll moves it. Before
+    anyone scrolls, the jet draws itself in gold lines while the camera swings around it, then a
+    ring of light sweeps it solid. Fast scrolling widens the lens a touch. Nav and wing lights,
+    strobes and beacons blink, the fans turn, dust drifts.
+  - *Detail.* Livery painted on the fuselage (white top, black belly, gold pinstripes, panel lines
+    with a slight bump, main door, over-wing exit), black tail with his emblem, registration
+    **N633AS** (6:33, AnointedSuds), chrome leading edges, warm-lit windows in chrome frames,
+    winglets, flap lines, gold engine lips, landing-gear oleos and gold hub caps, a landing-light
+    beam. Inside (x-ray stop): leather club seats with arms, a divan with gold pillows, wood
+    tables and credenzas with gold trim, carpet, galley with a stone top, glowing ceiling strips.
+  - *One square foot* is on the black tail, where grime, the polish pass and the water beads
+    after the coating read best.
+  - Loads only when someone heads toward it (or after the page settles), so it never slows the
+    first screen. `TOUR_VERSION` in index.html busts the browser cache when tour.js changes.
+  - Rendered directly with soft halo sprites for glow and a CSS vignette. (A bloom pass and
+    three's clipping planes both caused artifacts; the reveal is a shader cut instead.)
+  - Test hook: open with `?debug3d` and call `__tourSnap(seconds)` to render one frame at any stop.
+    It does nothing for visitors.
+- **Airport map** is flat, every pin is a real button, and tapping one selects it in the form.
+
+## SEO
+- Structured data on the home page: `ProfessionalService` (name, phone, email, hours, Sacramento,
+  all 8 airports as `Airport` with IATA/ICAO codes, every service) and `FAQPage`.
+- A visible FAQ (7 questions) with answers that only repeat what the site already says.
+- **One landing page per airport**, `aircraft-detailing/<slug>/`, built by
+  `python3 tools/build_airports.py`: its own title, description, copy, `Service` and
+  `BreadcrumbList` schema, a canonical URL, links to every other airport, and Book buttons that
+  open the main form with that airport already picked (`?apt=SAC#book`). Linked from the airport
+  section and the footer. Copy sticks to well-known public facts about each field.
+- `sitemap.xml` and `robots.txt` are generated by the same script.
+- Fast first load: the 3D downloads on demand, images are sized per screen, fonts use swap.
 
 ## Phones (checked at 360, 390 and 430 wide)
 - Logo, headline and both buttons fit on the first screen.
@@ -133,10 +160,11 @@ Test with the network stubbed, never by submitting the live form.
 6. His About paragraph (marked `PLACEHOLDER` in the HTML).
 7. Confirm the four process steps are how he works, especially arrival photos and the
    photo report, since the site promises them.
-8. Domain → GitHub Pages + `CNAME`, then remove `<meta name="robots" content="noindex">`.
-9. Once he has a domain, the Chicago site's per-airport pages (`/aircraft-detailing-midway`
-   etc.) are worth copying as a pattern: one short page per airport ranks for "aircraft
-   detailing SAC" style searches.
+8. Domain → GitHub Pages + `CNAME`, then remove `<meta name="robots" content="noindex">` from
+   index.html, set `SITE` and `NOINDEX = False` in `tools/build_airports.py`, re-run it, and submit
+   `sitemap.xml` in Google Search Console. Add `<link rel="canonical">` to index.html then too.
+9. Google Business Profile for AnointedSuds (service-area business, Sacramento). That listing plus
+   these airport pages is most of local SEO.
 
 ## Local preview
 ```
