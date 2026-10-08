@@ -34,7 +34,7 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 
 // How much scroll each leg of the tour gets. Leg 4 (leaving the square foot) is longer
 // because the cleaning plays out on it. Shared with index.html so the stop list jumps right.
-const LEG = [2.8, 1, 1, 1, 1.8, 1, 1, 1.15];   // leg 0 is long: the build plays out on it
+const LEG = [2.8, 1.5, 1.5, 1.2, 1.8, 1.2, 1.2, 1.3];   // leg 0 is long: the build plays out on it; nose → windscreen → wing get extra room
 const CUM = [0]; { const sum = LEG.reduce((a, b) => a + b, 0); LEG.forEach(w => CUM.push(CUM[CUM.length - 1] + w / sum)); }
 // The overview stop sits where the build finishes, so jumping to it shows the finished jet.
 const BUILD_END = .66;
@@ -354,7 +354,8 @@ async function start(){
   beam.quaternion.setFromUnitVectors(V(0, -1, 0), V(1, -.2, 0).normalize()); scene.add(beam);
 
   /* ---------------- one square foot, on the black tail fin (dark paint shows it best) ---------------- */
-  const patch = new THREE.Group(); patch.position.set(-8.75, 1.75, .1215); patch.rotation.x = Math.PI / 2; jet.add(patch);
+  // Low and forward on the fin, well clear of the emblem decal (centered at -9.15, 2.45), so the logo never fills the close-up.
+  const patch = new THREE.Group(); patch.position.set(-7.6, 1.15, .1215); patch.rotation.x = Math.PI / 2; jet.add(patch);
   const plateMat = M({ color:0x3a3733, roughness:.7, metalness:.1, clearcoat:0, clearcoatRoughness:.03 });
   add(new THREE.BoxGeometry(.305, .003, .305), plateMat, patch).position.y = .0015;
   {
@@ -580,7 +581,7 @@ async function start(){
     posC.getPoint(u, P0); tgtC.getPoint(u, T0);
     off3.subVectors(P0, T0);
     let ang = Math.sin(t * .17) * .05 + swing * 1.15;
-    if (i === 4 && f < .66) ang += (hold - .35) * .9;
+    if (i === 4 && f < .66) ang -= (hold - .35) * .9;   // swings toward the nose side, looking away from the emblem
     off3.applyAxisAngle(UP, ang);
     off3.multiplyScalar(1 + swing * .3 + (portrait ? (macroK > .5 ? .2 : .22) : 0));
     off3.y += swing * 2.2;

@@ -28,8 +28,8 @@
 <style>
 /* AnointedSuds Aviation Detailing.
    Black, gold and silver from his logo, kept flat: no gradients on type or buttons.
-   Voices: Manrope for everything, Instrument Serif italic for the gold accent words,
-   IBM Plex Mono for airport codes and labels, Cinzel only in the wordmark (it matches the logo). */
+   Voices: Manrope for everything (accent words are just gold, same face), Instrument Serif
+   italic only for the Matthew 6:33 quote, IBM Plex Mono for airport codes and tail numbers, Cinzel only in the wordmark (it matches the logo). */
 :root{
   --bg:#000; --bg2:#070707; --card:#0d0d0c; --card2:#121211;
   --ink:#f4f1ea; --mute:#a19d95; --dim:#6b6862;
@@ -52,45 +52,35 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 svg.i{width:1.1em;height:1.1em;flex:none}
 
 /* ---------- type ---------- */
-.eye{display:inline-flex;align-items:center;gap:10px;font:500 11.5px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-.eye::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.eye{display:inline-block;font:700 13px/1.2 Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
 .disp{font-family:Manrope,sans-serif;font-weight:600;letter-spacing:-.035em;line-height:1.02;margin:0}
-.disp em,.accent{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-.01em;color:var(--gold)}
+.disp em,.accent{font-style:normal;color:var(--gold)}
 h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .lead{color:var(--mute);font-size:clamp(1rem,1.4vw,1.125rem);max-width:58ch}
 .mono{font-family:'IBM Plex Mono',monospace}
 
 /* ---------- buttons ----------
-   Gold: a soft metal fill with an inner bevel and a dark icon disc. Glass: a blurred
-   pane with a gold-to-clear hairline border and a gold icon disc. Labels roll up on
-   hover, the icon tips, a glint crosses the gold ones every few seconds, they lean
-   toward the mouse, and a tap pops a little burst of suds. */
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;height:56px;padding:0 24px 0 8px;border-radius:999px;
+   Gold: one warm metal fill with a thin top highlight, the icon sits in the label (no disc).
+   Outline: a plain 1px border on a faint pane. Labels roll up on hover, the icon tips,
+   buttons lean toward the mouse and ease back when it leaves, and a tap pops a little
+   burst of suds. */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 26px;border-radius:999px;
   font-weight:700;font-size:15px;letter-spacing:.005em;white-space:nowrap;isolation:isolate;overflow:hidden;
-  transition:box-shadow .3s,background .3s,transform .2s var(--ease),translate .4s var(--ease)}
+  transition:box-shadow .3s,background .3s,border-color .3s,transform .2s var(--ease),translate .55s var(--ease)}
 .btn:active{transform:scale(.97)}
-.btn > svg.i{width:40px;height:40px;padding:11px;border-radius:50%;flex:none;transition:transform .5s var(--ease)}
-.btn:hover > svg.i{transform:rotate(-14deg) scale(1.06)}
-.btn-gold,.bigcall,.bar .b-call{color:#1b1306;
-  background:linear-gradient(180deg,#f7de9f 0%,#e8bd63 46%,#cf9e41 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 0 0 1px rgba(255,236,190,.4),inset 0 -4px 10px rgba(122,80,12,.28),0 1px 0 rgba(0,0,0,.5),0 16px 34px -14px rgba(224,180,92,.75)}
-.btn-gold:hover,.bigcall:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(255,236,190,.5),inset 0 -4px 10px rgba(122,80,12,.22),0 1px 0 rgba(0,0,0,.5),0 22px 44px -14px rgba(224,180,92,.95)}
-.btn-gold > svg.i{background:#17110a;color:#f1cf86;box-shadow:inset 0 0 0 1px rgba(241,207,134,.35),0 2px 6px rgba(80,50,0,.35)}
-.btn-ghost{color:var(--ink);background:rgba(255,255,255,.04);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}
-.btn-ghost::before,.bar .b-alt::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
-  background:linear-gradient(135deg,rgba(241,207,134,.85),rgba(255,255,255,.14) 38%,rgba(255,255,255,.06) 62%,rgba(241,207,134,.55));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.btn-ghost:hover{background:rgba(255,255,255,.08)}
-.btn-ghost > svg.i{background:rgba(224,180,92,.12);color:var(--gold);box-shadow:inset 0 0 0 1px rgba(224,180,92,.45)}
-.btn-gold::after,.bigcall::after,.bar .b-call::after{content:"";position:absolute;top:-2px;bottom:-2px;left:-60%;width:36%;z-index:-1;pointer-events:none;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);transform:skewX(-18deg)}
-.js .btn-gold::after,.js .bigcall::after,.js .bar .b-call::after{animation:glint 6s var(--ease) infinite var(--gd,1.2s)}
-@keyframes glint{0%,72%{left:-60%}100%{left:135%}}
+.btn > svg.i{width:18px;height:18px;margin-left:-2px;transition:transform .5s var(--ease)}
+.btn:hover > svg.i{transform:rotate(-14deg) scale(1.08)}
+.btn-gold,.bigcall,.bar .b-call{color:#1b1306;background:linear-gradient(180deg,#ecc77d,#d9a94e);
+  box-shadow:inset 0 1px 0 rgba(255,244,214,.6),0 1px 0 rgba(0,0,0,.45),0 14px 30px -16px rgba(224,180,92,.7)}
+.btn-gold:hover,.bigcall:hover{background:linear-gradient(180deg,#f1d08c,#dfb158);box-shadow:inset 0 1px 0 rgba(255,244,214,.7),0 1px 0 rgba(0,0,0,.45),0 18px 36px -16px rgba(224,180,92,.9)}
+.btn-ghost{color:var(--ink);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(224,180,92,.6)}
+.btn-ghost > svg.i{color:var(--gold)}
 .bt{display:grid;height:1.3em;line-height:1.3em;overflow:hidden}
 .bt > span{transition:transform .5s var(--ease)}
 .btn:hover .bt > span,.bigcall:hover .bt > span{transform:translateY(-100%)}
-.btn-sm{height:44px;padding:0 17px 0 6px;font-size:14px;gap:9px}
-.btn-sm > svg.i{width:32px;height:32px;padding:8px}
+.btn-sm{height:44px;padding:0 18px;font-size:14px;gap:8px}
+.btn-sm > svg.i{width:16px;height:16px}
 .pop{position:fixed;left:0;top:0;z-index:90;pointer-events:none;border-radius:50%}
 .link{display:inline-flex;align-items:center;gap:7px;color:var(--gold);font-weight:700;font-size:14.5px}
 .link svg{transition:transform .25s var(--ease)}
@@ -150,8 +140,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .js .ring{animation:orbit 14s linear infinite}
 @keyframes orbit{to{transform:rotateZ(360deg)}}
 .ring .jet{position:absolute;left:50%;top:0;width:clamp(22px,3.6vw,30px);aspect-ratio:1;transform:translate(-50%,-50%) rotate(90deg);color:var(--gold)}
-#suds{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.scroll-cue{position:absolute;left:50%;bottom:22px;translate:-50% 0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--dim)}
+.scroll-cue{position:absolute;left:50%;bottom:22px;translate:-50% 0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--dim)}
 .scroll-cue i{width:1px;height:34px;background:var(--gold);transform-origin:top}
 .js .scroll-cue i{animation:cue 2.2s var(--ease) infinite}
 @keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
@@ -173,7 +162,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 }
 
 /* ---------- 3D walkaround ---------- */
-.tour{position:relative;height:calc(100svh + 9 * 88svh);background:#000}
+.tour{position:relative;height:calc(100svh + 9 * 125svh);background:#000}
 .tour-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .tour-sticky::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.55) 100%);z-index:1}
 .tour-ui,.hot,.t-bar,.tour-load{z-index:2}
@@ -182,7 +171,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .tour-ui{position:absolute;inset:0;pointer-events:none}
 .tour-ui .wrap{position:relative;height:100%}
 .t-head{position:absolute;left:0;top:calc(var(--hdr) + 22px);display:flex;align-items:center;gap:16px;padding:9px 14px;border-radius:999px;background:rgba(0,0,0,.6);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.t-count{font:500 12px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--mute)}
+.t-count{font:700 13px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--mute)}
 .t-count b{color:var(--ink);font-weight:500}
 .tcard{position:absolute;left:0;bottom:clamp(40px,9vh,96px);width:min(420px,100%);padding:24px 24px 22px;border-radius:20px;background:rgba(10,10,9,.8);border:1px solid var(--line2);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);opacity:0;transform:translate3d(0,14px,0);transition:opacity .45s var(--ease),transform .45s var(--ease);pointer-events:none}
 .tcard.on{opacity:1;transform:none;pointer-events:auto}
@@ -190,10 +179,10 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .tcard.on > *{opacity:1;transform:none}
 .tcard.on > :nth-child(2){transition-delay:.06s}.tcard.on > :nth-child(3){transition-delay:.12s}.tcard.on > :nth-child(4){transition-delay:.18s}
 .tour.static .tcard > *{opacity:1;transform:none}
-.tcard .tn{font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.18em;color:var(--gold)}
+.tcard .tn{font:700 12px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--gold)}
 .tcard h3{margin:12px 0 10px;font-size:clamp(1.5rem,2.4vw,2rem);font-weight:600;letter-spacing:-.03em;line-height:1.1}
 .tcard p{margin:0;color:#c4c0b8;font-size:15px;line-height:1.6}
-.tcard .hint{display:flex;align-items:center;gap:8px;margin-top:16px;color:var(--dim);font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em}
+.tcard .hint{display:flex;align-items:center;gap:8px;margin-top:16px;color:var(--dim);font:700 12px/1 Manrope,sans-serif;letter-spacing:.06em}
 .tcard .hint i{width:1px;height:18px;background:var(--gold);animation:cue 2s var(--ease) infinite}
 .tcard .acts{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
 .phase{display:flex;gap:6px;margin-top:16px}
@@ -217,12 +206,12 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .hot .pt::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid var(--gold);animation:ping 2s var(--ease) infinite}
 @keyframes ping{from{transform:scale(.4);opacity:1}to{transform:scale(1.8);opacity:0}}
 .hot .lb{position:absolute;left:18px;top:-14px;white-space:nowrap;padding:6px 11px;border-radius:999px;background:rgba(0,0,0,.7);border:1px solid var(--gline);font:500 11.5px/1 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--ink)}
-.tour-load{position:absolute;left:50%;top:44%;translate:-50% -50%;display:flex;flex-direction:column;align-items:center;gap:14px;font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--dim);transition:opacity .5s}
+.tour-load{position:absolute;left:50%;top:44%;translate:-50% -50%;display:flex;flex-direction:column;align-items:center;gap:14px;font:700 12px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--dim);transition:opacity .5s}
 .tour-load i{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);background-size:200% 100%;animation:load 1.4s linear infinite}
 @keyframes load{from{background-position:100% 0}to{background-position:-100% 0}}
 .tour.ready .tour-load{opacity:0}
 @media (max-width:859px){
-  .tour{height:calc(100svh + 9 * 78svh)}
+  .tour{height:calc(100svh + 9 * 105svh)}
   .t-head{top:calc(var(--hdr) + 14px)}
   .tcard{left:0;right:0;width:auto;bottom:calc(86px + env(safe-area-inset-bottom));padding:18px 18px 16px;border-radius:18px}
   .tcard h3{margin:8px 0 6px}
@@ -260,8 +249,8 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
   background:conic-gradient(from 0deg,rgba(224,180,92,.16),rgba(224,180,92,0) 40deg,transparent)}
 .js .map .sweep{animation:spin 7s linear infinite}
 @keyframes spin{to{rotate:360deg}}
-.map .city{position:absolute;left:34%;top:68%;translate:-50% -50%;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:rgba(255,255,255,.3);pointer-events:none}
-.map .corner{position:absolute;right:16px;top:14px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--dim)}
+.map .city{position:absolute;left:34%;top:68%;translate:-50% -50%;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em;color:rgba(255,255,255,.3);pointer-events:none}
+.map .corner{position:absolute;right:16px;top:14px;font:700 11px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--dim)}
 .pin{position:absolute;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,calc(-100% + 6px));z-index:1}
 .pin.below{flex-direction:column-reverse;transform:translate(-50%,-6px)}
 .pin .tag{padding:6px 9px;border-radius:8px;background:#0c0c0b;border:1px solid var(--line2);font:500 12px/1 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--ink);transition:background .2s,border-color .2s,color .2s}
@@ -302,7 +291,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .ph{position:relative;perspective:1100px}
 .ph-in{position:relative;aspect-ratio:4/3.1;border-radius:20px;overflow:hidden;clip-path:inset(0 round 20px);will-change:transform;box-shadow:0 40px 80px -40px rgba(0,0,0,1)}
 .ph-in img{width:100%;height:100%;object-fit:cover;transform:scale(1.1);will-change:transform}
-.ph .num{position:absolute;z-index:2;left:18px;bottom:16px;font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#fff;padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.ph .num{position:absolute;z-index:2;left:18px;bottom:16px;font:700 12px/1 Manrope,sans-serif;letter-spacing:.06em;color:#fff;padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .svc h3{font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:600;letter-spacing:-.035em;line-height:1.05;margin:14px 0 16px}
 .svc p{color:var(--mute);margin:0 0 22px;max-width:56ch}
 .incl{list-style:none;padding:0;margin:0 0 28px;display:grid;grid-template-columns:1fr 1fr;gap:9px 22px;font-size:14.5px}
@@ -316,7 +305,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
   .incl{grid-template-columns:1fr;margin-bottom:12px;gap:10px}
   .incl:not(.open) li:nth-child(n+6){display:none}
   .incl-more{display:inline-flex;align-items:center;min-height:44px;margin:0 0 18px;color:var(--gold);font-size:14px;font-weight:700}
-  .svc .acts .btn{flex:1 1 160px}
+  .svc .acts .btn{flex:1 1 auto}
   .svc{padding:36px 0;gap:26px}
   .svc h3{margin:10px 0 12px}
 }
@@ -352,7 +341,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .about-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(30px,6vw,96px);align-items:start}
 .about-copy p{color:var(--mute);margin:0 0 18px}
 .about-copy .verse{margin-top:28px;padding:18px 20px;border-left:2px solid var(--gold);color:#dcd6ca;font-family:'Instrument Serif',serif;font-style:italic;font-size:21px;line-height:1.4}
-.about-copy .verse b{display:block;font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--gold);font-style:normal;margin-top:12px}
+.about-copy .verse b{display:block;font:700 12px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--gold);font-style:normal;margin-top:12px}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .step{display:grid;grid-template-columns:52px minmax(0,1fr);gap:18px;padding:20px 22px;border-radius:16px;border:1px solid var(--line);background:var(--card);transition:border-color .5s}
 .step .n{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font:500 14px/1 'IBM Plex Mono',monospace;color:var(--gold);border:1px solid var(--gline);transition:background .5s,color .5s}
@@ -366,7 +355,7 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .clients{padding-top:0}
 .cl-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 .cl{padding:22px 18px;border-radius:16px;border:1px solid var(--line);background:var(--card);min-height:146px;display:flex;flex-direction:column;justify-content:space-between}
-.cl b{font:500 12px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--gold)}
+.cl b{font:700 13px/1 Manrope,sans-serif;letter-spacing:.06em;color:var(--gold)}
 .cl span{font-weight:700;font-size:15.5px;line-height:1.3;margin-top:22px}
 @media (max-width:1023px){.cl-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:620px){.cl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cl{min-height:0;padding:16px;gap:12px}.cl span{margin-top:0;font-size:14.5px}.cl:last-child{grid-column:1/-1}}
@@ -378,12 +367,14 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .band::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(0,0,0,.66)}
 .band h2{font-size:clamp(2.1rem,5.4vw,4.3rem);max-width:15ch;margin:18px auto 18px}
 .band .lead{margin:0 auto 34px;color:#d6d1c7}
-.bigcall{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;gap:16px;font:700 clamp(1.5rem,4vw,2.6rem)/1 Manrope,sans-serif;letter-spacing:-.02em;padding:12px 38px 12px 12px;border-radius:999px;transition:box-shadow .3s,translate .4s var(--ease)}
-.bigcall > svg{width:clamp(52px,6vw,68px);height:clamp(52px,6vw,68px);padding:clamp(14px,1.7vw,19px);border-radius:50%;background:#17110a;color:#f1cf86;box-shadow:inset 0 0 0 1px rgba(241,207,134,.35);flex:none;transition:transform .5s var(--ease)}
+.bigcall{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:clamp(12px,1.4vw,18px);font:700 clamp(1.5rem,4vw,2.6rem)/1 Manrope,sans-serif;letter-spacing:-.02em;padding:clamp(18px,2vw,24px) clamp(30px,3.4vw,44px);border-radius:999px}
+/* .rv sets its own transition on this element, so list everything here (with the reveal) or the lean snaps back */
+.bigcall,.js .bigcall.rv{transition:opacity .8s var(--ease),transform .8s var(--ease),box-shadow .3s,background .3s,translate .55s var(--ease)}
+.bigcall > svg{width:.8em;height:.8em;flex:none;transition:transform .5s var(--ease)}
 .bigcall:hover > svg{transform:rotate(-14deg) scale(1.05)}
 .band .alt{margin-top:22px;color:#cfcac0;font-size:14.5px}
 .band .alt a{color:var(--gold);font-weight:700}
-@media (max-width:520px){.bigcall{padding:10px 22px 10px 10px;gap:12px;width:100%;justify-content:flex-start}}
+@media (max-width:520px){.bigcall{padding:18px 22px;gap:12px;width:100%}}
 
 /* ---------- booking ---------- */
 .book-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,5vw,72px);align-items:start}
@@ -509,7 +500,7 @@ input[type=datetime-local].inp{color-scheme:dark}
 .finale .cta-row{justify-content:center}
 .foot{border-top:1px solid var(--line);padding:56px 0 calc(40px + env(safe-area-inset-bottom));background:#050505;font-size:14.5px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
-.foot h5{margin:0 0 14px;font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.foot h5{margin:0 0 14px;font:700 12px/1.2 Manrope,sans-serif;letter-spacing:.06em;color:var(--gold);text-transform:uppercase}
 .foot ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;color:var(--mute)}
 .foot ul a:hover{color:var(--ink)}
 .foot .about-f p{color:var(--mute);margin:16px 0 0;max-width:36ch}
@@ -531,9 +522,13 @@ input[type=datetime-local].inp{color-scheme:dark}
 /* ---------- phone bar ---------- */
 .bar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:60;display:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px;border-radius:999px;background:rgba(14,14,13,.84);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--line2);transition:transform .45s var(--ease),opacity .45s}
 .bar a{position:relative;isolation:isolate;overflow:hidden;height:50px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px}
-.bar .b-alt{background:rgba(255,255,255,.05);color:var(--ink)}
+.bar .b-alt{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid rgba(255,255,255,.16)}
 .bar a svg.i{width:18px;height:18px}
 .bar.hide{transform:translateY(140%);opacity:0;pointer-events:none}
+/* standalone text links get a full 44px tap height on touch screens */
+@media (max-width:859px){.hero-sub a,.callbox a[data-tel]{min-height:44px;display:inline-flex;align-items:center}.apt-guides a{display:inline-block;min-width:44px;text-align:center;padding:12px 4px;line-height:20px}
+  /* footer links and "Ask about it": a bigger hit area, same layout (the negative margin cancels the padding) */
+  .foot ul a,.link{display:inline-block;padding:12px 0;margin:-12px 0}.link{display:inline-flex}}
 @media (max-width:859px){.bar{display:grid}.foot{padding-bottom:calc(110px + env(safe-area-inset-bottom))}}
 
 .toast{position:fixed;left:50%;top:calc(var(--hdr) + 12px);z-index:80;translate:-50% -20px;opacity:0;pointer-events:none;display:flex;align-items:center;gap:10px;max-width:calc(100% - 32px);padding:13px 18px;border-radius:14px;background:#141412;border:1px solid var(--line2);font-size:14.5px;font-weight:600;transition:all .45s var(--ease)}
@@ -619,7 +614,7 @@ input[type=datetime-local].inp{color-scheme:dark}
       <a href="#faq">FAQ</a>
     </nav>
     <div class="hdr-cta">
-      <a class="btn btn-ghost btn-sm hdr-text" data-sms>Text us</a>
+      <a class="btn btn-ghost btn-sm hdr-text" data-sms><svg class="i"><use href="#i-msg"/></svg>Text us</a>
       <a class="btn btn-gold btn-sm" data-tel><svg class="i"><use href="#i-phone"/></svg><span>Call</span></a>
     </div>
   </div>
@@ -632,7 +627,6 @@ input[type=datetime-local].inp{color-scheme:dark}
   <div class="hero-bg" id="heroBg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=1800&q=72"
     srcset="https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=900&q=70 900w, https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=1800&q=72 1800w, https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=2600&q=68 2600w"
     sizes="100vw" alt="" fetchpriority="high" decoding="async"></div>
-  <canvas id="suds" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="hero-copy" id="heroCopy">
       <span class="eye hero-eye rv">AnointedSuds Aviation Detailing</span>
@@ -1113,49 +1107,22 @@ function toast(html, ms=6000){
   $$('.rv').forEach(e => { if (!e.closest('.hero')) io.observe(e); });
 })();
 
-/* ------------------------- hero: logo + suds ------------------------- */
+/* ------------------------- hero: logo tilt ------------------------- */
 (function hero(){
   const heroEl = $('#hero'), tilt = $('#tilt'), stage = $('#stage'), copy = $('#heroCopy'), heroBg = $('#heroBg');
-  const cv = $('#suds'), g = cv.getContext('2d');
-  let W = 0, H = 0, visible = true, raf = 0;
-  let tx = 0, ty = 0, cx = 0, cy = 0, px = -1e4, py = -1e4, touching = false;
+  let H = 0, visible = true, raf = 0;
+  let tx = 0, ty = 0, cx = 0, cy = 0, touching = false;
 
-  // One clean bubble sprite: a thin rim and a single highlight.
-  function sprite(){
-    const s = document.createElement('canvas'); s.width = s.height = 128;
-    const c = s.getContext('2d');
-    c.strokeStyle = 'rgba(255,255,255,.42)'; c.lineWidth = 1.6; c.beginPath(); c.arc(64,64,60,0,7); c.stroke();
-    c.strokeStyle = 'rgba(236,199,125,.35)'; c.lineWidth = 3; c.beginPath(); c.arc(64,64,58,.6,1.9); c.stroke();
-    c.fillStyle = 'rgba(255,255,255,.75)'; c.beginPath(); c.ellipse(42,38,10,5,-.7,0,7); c.fill();
-    return s;
-  }
-  const SPR = sprite();
-  const small = innerWidth < 760;
-  const N = REDUCED ? 0 : small ? 12 : 26;
-  const bubbles = [];
-  const rnd = (a, b) => a + Math.random() * (b - a);
-  function spawn(b, fresh){
-    b.r = rnd(small ? 4 : 5, small ? 14 : 20);
-    b.x = W > 860 && Math.random() < .8 ? rnd(W * .5, W) : rnd(0, W);
-    b.y = fresh ? rnd(0, H) : H + b.r + rnd(0, 60);
-    b.vy = rnd(14, 30) * (1 - b.r / 80); b.ph = rnd(0, 6.28); b.amp = rnd(6, 20); b.sp = rnd(.4, 1); b.a = rnd(.3, .7); b.ox = 0;
-    return b;
-  }
-  function size(){
-    const r = heroEl.getBoundingClientRect(), DPR = Math.min(devicePixelRatio || 1, 2);
-    W = r.width; H = r.height; cv.width = W * DPR; cv.height = H * DPR; g.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
+  const size = () => { H = heroEl.getBoundingClientRect().height; };
   size();
-  for (let i = 0; i < N; i++) bubbles.push(spawn({}, true));
   addEventListener('resize', size);
 
   if (FINE){
     heroEl.addEventListener('pointermove', e => {
       const r = heroEl.getBoundingClientRect();
       tx = (e.clientX - r.left) / r.width * 2 - 1; ty = (e.clientY - r.top) / r.height * 2 - 1;
-      px = e.clientX - r.left; py = e.clientY - r.top;
     });
-    heroEl.addEventListener('pointerleave', () => { tx = ty = 0; px = py = -1e4; });
+    heroEl.addEventListener('pointerleave', () => { tx = ty = 0; });
   } else {
     const vis = $('#heroVisual');
     vis.addEventListener('touchstart', () => touching = true, { passive:true });
@@ -1182,19 +1149,6 @@ function toast(html, ms=6000){
       copy.style.opacity = (1 - p * 1.4).toFixed(3);
       heroBg.style.transform = `translate3d(${(-cx * 14).toFixed(1)}px,${(-cy * 10 + p * 120).toFixed(1)}px,0)`;
     }
-    g.clearRect(0, 0, W, H);
-    const t = now / 1000;
-    for (const b of bubbles){
-      b.y -= b.vy * dt;
-      const dx = b.x - px, dy = b.y - py, d2 = dx*dx + dy*dy;
-      if (d2 < 14000){ const f = (14000 - d2) / 14000; b.ox += (dx > 0 ? 1 : -1) * f * 90 * dt; }
-      b.ox *= .985;
-      const x = b.x + Math.sin(t * b.sp + b.ph) * b.amp + b.ox;
-      if (b.y < -b.r * 2) spawn(b);
-      g.globalAlpha = b.a * clamp((H - b.y) / 140, 0, 1) * clamp(b.y / (H * .25), 0, 1);
-      g.drawImage(SPR, x - b.r, b.y - b.r, b.r * 2, b.r * 2);
-    }
-    g.globalAlpha = 1;
     if (visible && !document.hidden) raf = requestAnimationFrame(frame);
   }
   document.addEventListener('visibilitychange', () => { if (!document.hidden && visible && !raf){ last = performance.now(); raf = requestAnimationFrame(frame); } });
@@ -1204,7 +1158,7 @@ function toast(html, ms=6000){
 /* ------------------------- scroll-linked bits ------------------------- */
 (function scrollFx(){
   if (REDUCED) return;
-  const photos = innerWidth > 859 ? $$('[data-tilt]') : [], rw = $('#rw'), bandBg = $('#bandBg'), steps = $$('#steps .step');
+  const photos = innerWidth > 859 ? $$('[data-tilt]') : [], bandBg = $('#bandBg'), steps = $$('#steps .step');
   let ticking = false;
   const prog = el => { const r = el.getBoundingClientRect(); return clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1); };
   function frame(){
@@ -1216,7 +1170,6 @@ function toast(html, ms=6000){
       el.style.transform = `rotateY(${((1 - e) * 14 * side).toFixed(2)}deg) rotateX(${((1 - e) * 6).toFixed(2)}deg) translateZ(${(-(1 - e) * 80).toFixed(1)}px)`;
       el.querySelector('img').style.transform = `scale(1.1) translate3d(0,${((p - .5) * -7).toFixed(2)}%,0)`;
     });
-    if (rw) rw.style.setProperty('--off', (prog(rw.parentElement) * 1400).toFixed(1) + 'px');
     if (bandBg) bandBg.style.transform = `translate3d(0,${((prog(bandBg.parentElement) - .5) * 14).toFixed(2)}%,0) scale(1.06)`;
     steps.forEach(s => s.classList.toggle('lit', s.getBoundingClientRect().top < innerHeight * .62));
   }
@@ -1224,9 +1177,32 @@ function toast(html, ms=6000){
   addEventListener('scroll', req, { passive:true }); addEventListener('resize', req); frame();
 })();
 
+/* ------------------------- runway 33 ------------------------- */
+// Always rolling toward you at a taxi pace; scrolling (either way) throttles it up, then it
+// eases back down. Runs only while the runway is on screen.
+(function runway(){
+  const rw = $('#rw');
+  if (!rw || REDUCED) return;
+  const BASE = 90, LOOP = 1560;                          // px/s; 1560 = a whole number of both stripe periods (104, 60)
+  let off = 0, boost = 0, y = scrollY, last = 0, raf = 0;
+  function loop(now){
+    const dt = last ? Math.min(.05, (now - last) / 1000) : 0; last = now;
+    const dy = Math.abs(scrollY - y); y = scrollY;
+    const want = dt ? Math.min(1500, dy / dt) : 0;
+    boost += (want - boost) * (1 - Math.exp(-(want > boost ? 10 : 2.2) * dt));
+    off = (off + (BASE + boost) * dt) % LOOP;
+    rw.style.setProperty('--off', off.toFixed(1) + 'px');
+    raf = requestAnimationFrame(loop);
+  }
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !raf){ last = 0; y = scrollY; raf = requestAnimationFrame(loop); }
+    else if (!e.isIntersecting && raf){ cancelAnimationFrame(raf); raf = 0; }
+  }).observe(rw.parentElement);
+})();
+
 /* ------------------------- walkaround: fallback + nav ------------------------- */
 // Bump when tour.js changes so browsers fetch the new one instead of a cached copy.
-const TOUR_VERSION = '35';
+const TOUR_VERSION = '36';
 (function tourShell(){
   const tour = $('#tour');
   const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (_) { return false; } })();
@@ -1289,8 +1265,6 @@ const TOUR_VERSION = '35';
     if (n.nodeType === 1){ for (const a of n.attributes) if (a.name.startsWith('data-')) w.firstChild.setAttribute(a.name, a.value); }
     b.replaceChild(w, n);
   });
-  // stagger the glints so the buttons don't all flash together
-  $$('.btn-gold,.bigcall,.bar .b-call').forEach((b, i) => b.style.setProperty('--gd', (1.2 + (i % 5) * 1.1).toFixed(1) + 's'));
 })();
 
 /* ------------------------- airports: map <-> list ------------------------- */

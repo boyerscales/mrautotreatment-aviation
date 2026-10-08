@@ -54,17 +54,22 @@ out anything that would be a false claim for him:
   - Pricing band: https://unsplash.com/photos/airplane-during-golden-hour-r1o0YEBIiEo
   When he sends photos of his own aircraft work, swap them in (`photo` in `CFG.SERVICES`).
 - **Matthew 6:33** is on his logo, so it's in About, the footer, and the runway is painted "33".
+  The runway always rolls toward you at a taxi pace and speeds up while you scroll.
 - **Airports:** 8 public fields around Sacramento until his list arrives (`CFG.AIRPORTS`, with
   rough map positions).
 
-## Design (revised twice on 2026-10-07 after Elijah's reviews)
-- **Modern, not 90s.** No metallic gradient type in headlines, no sunburst. Manrope for
-  everything, Instrument Serif italic for gold accent words, IBM Plex Mono for codes and labels,
-  Cinzel only in the wordmark.
-- **Buttons:** gold ones are a soft metal fill with an inner bevel and a dark icon disc; glass ones
-  have a blurred pane, a gold-to-clear hairline border and a gold icon disc. Labels roll up on
-  hover, icons tip, a glint crosses the gold ones every few seconds, they lean toward the mouse,
-  and a tap pops a little burst of suds and gold sparks. The phone bar's three buttons are equal.
+## Design (revised on 2026-10-07 after Elijah's reviews, again that night: "don't make it look like AI")
+- **Modern, not 90s, and not template-looking.** No metallic gradient type in headlines, no
+  sunburst. Manrope for everything: accent words in headlines are just gold, same face (no serif
+  italic swap), and section labels are plain uppercase Manrope (no dot, no wide-tracked mono).
+  Instrument Serif italic only for the Matthew 6:33 quote, IBM Plex Mono only for airport codes,
+  tail numbers and step numbers, Cinzel only in the wordmark.
+- **Buttons:** gold ones are one warm metal fill with a thin top highlight; outline ones are a
+  faint pane with a plain 1px border. The icon sits in the label (no disc) and padding is even, so
+  labels are centered with or without an icon. Labels roll up on hover, icons tip, buttons lean
+  toward the mouse and ease back when it leaves (`translate` is in every button's transition,
+  including `.bigcall`, which also has `.rv`), and a tap pops a little burst of suds. No auto glint.
+  The phone bar's three buttons are equal. `assets/page.css` (airport pages) matches.
 - **Hero:** golden-hour photo with his logo on the sun. The logo has no CSS filter on it (a
   drop-shadow on a 3D-transformed layer drew a dark haze behind it while the page loaded).
 - **The walkaround (`tour.js`)**, built the way award-winning scroll sites are:
@@ -79,8 +84,11 @@ out anything that would be a false claim for him:
     winglets, flap lines, gold engine lips, landing-gear oleos and gold hub caps, a landing-light
     beam. Inside (x-ray stop): leather club seats with arms, a divan with gold pillows, wood
     tables and credenzas with gold trim, carpet, galley with a stone top, glowing ceiling strips.
-  - *One square foot* is on the black tail, where grime, the polish pass and the water beads
-    after the coating read best.
+  - *One square foot* is low and forward on the black tail, clear of the emblem decal, where
+    grime, the polish pass and the water beads after the coating read best. The camera's slow orbit
+    there swings toward the nose, away from the emblem.
+  - *Pace:* the section is 9 × 125svh of scroll (105svh on phones), and the nose, windscreen and
+    wing legs get extra weight in `LEG`.
   - Loads only when someone heads toward it (or after the page settles), so it never slows the
     first screen. `TOUR_VERSION` in index.html busts the browser cache when tour.js changes.
   - Rendered directly with soft halo sprites for glow and a CSS vignette. (A bloom pass and
