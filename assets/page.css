@@ -93,6 +93,23 @@ h1 em,h2 em{font-style:normal;color:var(--gold)}
 .bio p{color:#d4d0c7;margin:0 0 16px}
 .verse-q{margin:26px 0 0;padding-left:18px;border-left:2px solid var(--gold);font:italic 20px/1.45 'Instrument Serif',serif;color:#e7e3da}
 .verse-q cite{display:block;margin-top:8px;font:700 12px/1 Manrope,sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+/* header nav (hidden on phones: the phone bar covers it) */
+.hdr .wrap > .pnav{display:flex;gap:26px;margin-left:auto;margin-right:14px;font-size:14px;font-weight:600;color:var(--mute)}
+.pnav a:hover{color:var(--ink)}
+/* the form at the bottom of every page */
+.quote{border-top:1px solid var(--line)}
+.qform{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:12px;align-items:end;margin-top:28px;padding:22px;border-radius:20px;border:1px solid var(--line);background:var(--card)}
+.qform .f{display:grid;gap:7px}
+.qform label{font-size:13px;font-weight:700;color:#d4d0c7}
+.qform select,.qform input{height:50px;width:100%;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:#050505;color:var(--ink);font:500 15px Manrope,sans-serif;color-scheme:dark}
+.qform input#qTail{text-transform:uppercase;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
+.qform select:focus,.qform input:focus{outline:none;border-color:var(--gold)}
+.qform .btn{height:50px}
+.qnote{margin:16px 0 0;color:var(--mute);font-size:14.5px}
+.qnote a{color:var(--gold);font-weight:700}
+@media (max-width:1000px){.qform{grid-template-columns:repeat(2,minmax(0,1fr))}.qform .btn{grid-column:1/-1}}
+@media (max-width:859px){.hdr .wrap > .pnav{display:none}}
+@media (max-width:520px){.qform{grid-template-columns:minmax(0,1fr);padding:18px}}
 /* phone bar */
 .bar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:30;display:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px;border-radius:999px;background:rgba(14,14,13,.84);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line2)}
 .bar a{position:relative;isolation:isolate;overflow:hidden;height:50px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px}

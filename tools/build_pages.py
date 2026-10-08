@@ -132,7 +132,31 @@ def how_it_works(up):
   </section>
 """
 
-def shell(up, title, desc, url, ld, main, book, sms_body):
+def quote_form(up, svc=None, apt=None):
+    """The form at the bottom of every page. It sends service, airport, tail number and takeoff
+    time to the home page's booking (?svc=&apt=&tail=&takeoff=#book), which fills them in, so the
+    visitor picks a time and adds their name and number there. Nothing personal goes in the URL."""
+    svc_opts = ''.join(f'<option value="{s["id"]}"{" selected" if s["id"] == svc else ""}>{e(s["label"])}</option>' for s in SERVICES)
+    svc_opts += f'<option value="full"{" selected" if svc == "full" else ""}>Full Detail, Inside &amp; Out</option>'
+    apt_opts = ''.join(f'<option value="{a["code"]}"{" selected" if a["code"] == apt else ""}>{a["code"]} · {e(a["short"])}</option>' for a in AIRPORTS)
+    return f"""  <section class="sec quote" id="quote">
+    <div class="wrap">
+      <span class="eye">Book online</span>
+      <h2>Need aircraft detailing in <em>Sacramento?</em></h2>
+      <p class="lead">Tell us the service, the aircraft and when it flies, then pick a time. We call you with your quote.</p>
+      <form class="qform" action="{up}#book" method="get">
+        <div class="f"><label for="qSvc">Service requested</label><select id="qSvc" name="svc">{svc_opts}</select></div>
+        <div class="f"><label for="qApt">Airport</label><select id="qApt" name="apt">{apt_opts}</select></div>
+        <div class="f"><label for="qTail">Tail number</label><input id="qTail" name="tail" required maxlength="10" pattern="[A-Za-z0-9][A-Za-z0-9\\-]{{1,9}}" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="N123AB"></div>
+        <div class="f"><label for="qTakeoff">Takeoff date and time</label><input id="qTakeoff" name="takeoff" type="datetime-local"></div>
+        <button class="btn btn-gold" type="submit">{ICON['cal']}Pick a time</button>
+      </form>
+      <p class="qnote">Parked somewhere else, or need it sooner than 24 hours? Call <a href="tel:{PHONE_E164}">{PHONE_TEXT}</a>.</p>
+    </div>
+  </section>
+"""
+
+def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None):
     """Head, header, footer and phone bar shared by every generated page. `up` is the path back to the site root."""
     sms = f"sms:{PHONE_E164}?&body=" + urllib.parse.quote(sms_body)
     robots = '<meta name="robots" content="noindex">\n' if NOINDEX else ''
@@ -160,10 +184,11 @@ def shell(up, title, desc, url, ld, main, book, sms_body):
 <body>
 <header class="hdr"><div class="wrap">
   <a class="brand" href="{up}" aria-label="{BUSINESS}, home">{mark_svg()}<span class="brand-txt"><b>Anointed<span>Suds</span></b><small>AVIATION DETAILING</small></span></a>
+  <nav class="pnav" aria-label="Main"><a href="{up}">Home</a><a href="{up}services/">Services</a><a href="{up}#airports">Airports</a><a href="{up}about/">About</a><a href="{up}#book">Book</a></nav>
   <a class="btn btn-gold btn-sm" href="tel:{PHONE_E164}">{ICON['phone']}Call</a>
 </div></header>
 <main>
-{main}</main>
+{main}{quote_form(up, svc, apt)}</main>
 <footer class="foot"><div class="wrap">
   <p><b>{BUSINESS}</b> · Aircraft cleaning and detailing in and around Sacramento · <a href="tel:{PHONE_E164}">{PHONE_TEXT}</a></p>
   <p class="links"><a href="{up}services/">Services</a> · <a href="{up}about/">About</a> · <a href="{up}#airports">Airports</a> · <a href="{up}#book">Book online</a></p>
@@ -234,7 +259,7 @@ def airport_page(a):
     </div>
   </section>
 """
-    return shell(up, title, desc, url, ld, main, book, f"Hi AnointedSuds, I'd like a quote on a detail at {a['code']}. Tail number: ")
+    return shell(up, title, desc, url, ld, main, book, f"Hi AnointedSuds, I'd like a quote on a detail at {a['code']}. Tail number: ", apt=a['code'])
 
 def service_page(s):
     up = '../../'
@@ -283,7 +308,7 @@ def service_page(s):
     </div>
   </section>
 """
-    return shell(up, title, desc, url, ld, main, book, f"Hi AnointedSuds, I'd like a quote on {s['short'].lower()}. Tail number: ")
+    return shell(up, title, desc, url, ld, main, book, f"Hi AnointedSuds, I'd like a quote on {s['short'].lower()}. Tail number: ", svc=s['id'])
 
 def services_index():
     up = '../'

@@ -200,6 +200,17 @@ checker reads raw HTML and the home page built its content with JavaScript. Fixe
   **Still placeholders:** his photo (a "photo coming soon" frame) and his background (one
   holding line). Set `ABOUT_PHOTO` and `ABOUT_BACKGROUND` in `tools/build_pages.py`, re-run it.
 
+### Second run (48%, 26 of 54 through week 2)
+- **A form at the bottom of every page:** every generated page ends with a quote form (service
+  requested, airport, tail number, takeoff time). It hands those to the home page's booking
+  (`?svc=&apt=&tail=&takeoff=#book`), where they pick a time and leave a name and number.
+- **Form asks for service:** the home page's service choice is now a radio group named
+  `service` *inside* the booking `<form>` (it sat above the form before). Every field has a `name`.
+- **Three pages, About in the nav:** the nav's Services and About go to `services/` and
+  `about/`, and every subpage has the same nav (Home, Services, Airports, About, Book).
+- **Business email on his own domain (open):** he needs `contact@anointedsuds.com`. Once it
+  forwards to anointedsuds@gmail.com, change `EMAIL` in CFG and re-run `prerender_home.py`.
+
 ## Local preview
 ```
 python3 -m http.server 4898

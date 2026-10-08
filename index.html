@@ -402,6 +402,9 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .opt{position:relative;text-align:left;padding:14px 14px 13px;border-radius:13px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:14.5px;line-height:1.25;transition:border-color .2s,background .2s}
 .opt small{display:block;font-weight:500;color:var(--mute);font-size:12.5px;margin-top:4px;line-height:1.35}
 .opt:hover{border-color:var(--line2)}
+label.opt{display:block;cursor:pointer}
+.opt:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:2px}
+fieldset.blk{border:0;padding:0;min-width:0;margin-inline:0}
 .opt.sel{border-color:var(--gold);background:var(--card2);box-shadow:0 0 0 1px var(--gold) inset}
 .opt.size{text-align:center;padding:12px 6px 11px;font-size:13px}
 .opt.size svg{display:block;margin:2px auto 8px;height:44px;width:auto;color:#bdb8ae;transition:color .2s}
@@ -611,7 +614,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     </a>
     <nav class="nav" aria-label="Main">
       <a href="#tour">Walkaround</a>
-      <a href="#services">Services</a>
+      <a href="services/">Services</a>
       <a href="#airports">Airports</a>
       <a href="about/">About</a>
       <a href="#book">Book</a>
@@ -963,15 +966,17 @@ input[type=datetime-local].inp{color-scheme:dark}
     </aside>
 
     <div class="panel rv" style="--d:1">
+      <form id="bookForm" novalidate>
       <div id="picker">
-        <div class="blk">
-          <div class="blk-h"><span class="k">1</span><b>Service requested</b></div>
-          <div class="seg two" id="segService"><button type="button" class="opt sel" data-svc="interior">
-      Interior Cabin Detail<small>Full cabin vacuum, Seats and armrests cleaned, Tray tables and work surfaces</small></button><button type="button" class="opt" data-svc="exterior">
-      Exterior Dry Wash<small>Complete exterior dry wash, Bugs and ramp grime removed, Leading edges cleaned</small></button><button type="button" class="opt" data-svc="carpet">
-      Carpet Shampoo &amp; Extraction<small>Carpet condition check, Full vacuum, Stain pre-treatment</small></button><button type="button" class="opt" data-svc="full">
-      Full Detail, Inside &amp; Out<small>Cabin, exterior and carpet</small></button></div>
-        </div>
+        <fieldset class="blk">
+          <legend class="vh">Service requested</legend>
+          <div class="blk-h" aria-hidden="true"><span class="k">1</span><b>Service requested</b></div>
+          <div class="seg two" id="segService"><label class="opt sel" data-svc="interior">
+      <input class="vh" type="radio" name="service" value="interior" checked="">Interior Cabin Detail<small>Full cabin vacuum, Seats and armrests cleaned, Tray tables and work surfaces</small></label><label class="opt" data-svc="exterior">
+      <input class="vh" type="radio" name="service" value="exterior">Exterior Dry Wash<small>Complete exterior dry wash, Bugs and ramp grime removed, Leading edges cleaned</small></label><label class="opt" data-svc="carpet">
+      <input class="vh" type="radio" name="service" value="carpet">Carpet Shampoo &amp; Extraction<small>Carpet condition check, Full vacuum, Stain pre-treatment</small></label><label class="opt" data-svc="full">
+      <input class="vh" type="radio" name="service" value="full">Full Detail, Inside &amp; Out<small>Cabin, exterior and carpet</small></label></div>
+        </fieldset>
         <div class="blk">
           <div class="blk-h"><span class="k">2</span><b>Aircraft</b><small>helps us quote</small></div>
           <div class="seg five" id="segSize"><button type="button" class="opt size" data-size="piston" aria-pressed="false">
@@ -983,8 +988,8 @@ input[type=datetime-local].inp{color-scheme:dark}
         </div>
         <div class="blk">
           <div class="blk-h"><span class="k">3</span><b>Airport</b></div>
-          <select class="inp" id="bApt" aria-label="Airport"><option value="SAC">SAC · Sacramento Executive</option><option value="MHR">MHR · Sacramento Mather</option><option value="MCC">MCC · McClellan Airfield</option><option value="LHM">LHM · Lincoln Regional</option><option value="AUN">AUN · Auburn Municipal</option><option value="DWA">DWA · Yolo County</option><option value="EDU">EDU · University Airport</option><option value="other">Somewhere else</option></select>
-          <div class="field" id="bAptOtherF" hidden style="margin:10px 0 0"><label for="bAptOther">Which airport?</label><input class="inp" id="bAptOther" placeholder="Name or code" autocomplete="off"></div>
+          <select class="inp" id="bApt" name="airport" aria-label="Airport"><option value="SAC">SAC · Sacramento Executive</option><option value="MHR">MHR · Sacramento Mather</option><option value="MCC">MCC · McClellan Airfield</option><option value="LHM">LHM · Lincoln Regional</option><option value="AUN">AUN · Auburn Municipal</option><option value="DWA">DWA · Yolo County</option><option value="EDU">EDU · University Airport</option><option value="other">Somewhere else</option></select>
+          <div class="field" id="bAptOtherF" hidden style="margin:10px 0 0"><label for="bAptOther">Which airport?</label><input class="inp" id="bAptOther" name="airport_other" placeholder="Name or code" autocomplete="off"></div>
         </div>
         <div class="blk" style="margin-bottom:6px">
           <div class="blk-h"><span class="k">4</span><b>Day and time</b><small id="hoursNote"></small></div>
@@ -993,27 +998,26 @@ input[type=datetime-local].inp{color-scheme:dark}
         </div>
       </div>
 
-      <form id="bookForm" novalidate>
         <div id="step2" hidden>
           <div class="blk-h" style="margin-top:22px"><span class="k">5</span><b>Your details</b></div>
           <div class="picked"><span id="pickedText"></span><button type="button" id="changeTime">Change</button></div>
           <div class="row2">
-            <div class="field"><label for="bName">Name</label><input class="inp" id="bName" autocomplete="name" placeholder="First and last name"></div>
-            <div class="field"><label for="bPhone">Mobile</label><input class="inp" id="bPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(916) 555-0123"></div>
+            <div class="field"><label for="bName">Name</label><input class="inp" id="bName" name="name" autocomplete="name" placeholder="First and last name"></div>
+            <div class="field"><label for="bPhone">Mobile</label><input class="inp" id="bPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(916) 555-0123"></div>
           </div>
-          <div class="field"><label for="bTail">Tail number</label><input class="inp tail" id="bTail" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="10" placeholder="N123AB"></div>
+          <div class="field"><label for="bTail">Tail number</label><input class="inp tail" id="bTail" name="tail" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="10" placeholder="N123AB"></div>
           <button type="button" class="more-toggle" id="moreToggle" aria-expanded="false" aria-controls="moreFields"><span>+</span>Add takeoff time, model, FBO or notes <i>(optional)</i></button>
           <div id="moreFields" hidden>
           <div class="row2">
-            <div class="field"><label for="bType">Make and model</label><input class="inp" id="bType" autocomplete="off" placeholder="Citation CJ3"></div>
-            <div class="field"><label for="bWheels">Takeoff date and time</label><input class="inp" id="bWheels" type="datetime-local"></div>
+            <div class="field"><label for="bType">Make and model</label><input class="inp" id="bType" name="model" autocomplete="off" placeholder="Citation CJ3"></div>
+            <div class="field"><label for="bWheels">Takeoff date and time</label><input class="inp" id="bWheels" name="takeoff" type="datetime-local"></div>
           </div>
           <div class="row2">
-            <div class="field"><label for="bEmail">Email</label><input class="inp" id="bEmail" type="email" inputmode="email" autocomplete="email" placeholder="Where we send your photos"></div>
-            <div class="field"><label for="bFbo">FBO, hangar or parking spot</label><input class="inp" id="bFbo" autocomplete="off" placeholder="FBO name, hangar 12"></div>
+            <div class="field"><label for="bEmail">Email</label><input class="inp" id="bEmail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Where we send your photos"></div>
+            <div class="field"><label for="bFbo">FBO, hangar or parking spot</label><input class="inp" id="bFbo" name="fbo" autocomplete="off" placeholder="FBO name, hangar 12"></div>
           </div>
           <div class="field"><label>Also interested in</label><div class="chips" id="bExtras"><label class="chip"><input type="checkbox" value="Ceramic coating"><span>Ceramic coating</span></label><label class="chip"><input type="checkbox" value="Brightwork and metal polish"><span>Brightwork and metal polish</span></label><label class="chip"><input type="checkbox" value="Paint correction"><span>Paint correction</span></label><label class="chip"><input type="checkbox" value="Belly and gear degreasing"><span>Belly and gear degreasing</span></label><label class="chip"><input type="checkbox" value="Exhaust soot removal"><span>Exhaust soot removal</span></label><label class="chip"><input type="checkbox" value="Leather care"><span>Leather care</span></label><label class="chip"><input type="checkbox" value="De-ice residue removal"><span>De-ice residue removal</span></label></div></div>
-          <div class="field"><label for="bNotes">Anything we should know?</label><textarea class="inp" id="bNotes" rows="3" placeholder="Gate code, problem spots, last time it was detailed"></textarea></div>
+          <div class="field"><label for="bNotes">Anything we should know?</label><textarea class="inp" id="bNotes" name="notes" rows="3" placeholder="Gate code, problem spots, last time it was detailed"></textarea></div>
           </div>
           <div class="sum" id="sum"></div>
           <button class="btn btn-gold sub-btn" id="bookBtn" type="submit"></button>
@@ -1484,9 +1488,9 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   $('#bExtras').innerHTML = CFG.MORE.slice(0, 7).map(([n]) => `<label class="chip"><input type="checkbox" value="${esc(n)}"><span>${esc(n)}</span></label>`).join('');
 
   function renderServices(){
-    $('#segService').innerHTML = CHOICES.map(s => `<button type="button" class="opt${s.id === service.id ? ' sel' : ''}" data-svc="${s.id}">
-      ${esc(s.label)}<small>${esc(s.sub || s.incl.slice(0, 3).join(', '))}</small></button>`).join('');
-    $$('#segService .opt').forEach(b => b.addEventListener('click', () => choose(b.dataset.svc)));
+    $('#segService').innerHTML = CHOICES.map(s => `<label class="opt${s.id === service.id ? ' sel' : ''}" data-svc="${s.id}">
+      <input class="vh" type="radio" name="service" value="${s.id}"${s.id === service.id ? ' checked' : ''}>${esc(s.label)}<small>${esc(s.sub || s.incl.slice(0, 3).join(', '))}</small></label>`).join('');
+    $$('#segService input').forEach(r => r.addEventListener('change', () => choose(r.value)));
   }
   function renderSizes(){
     $('#segSize').innerHTML = CFG.SIZES.map(z => `<button type="button" class="opt size${z.id === size ? ' sel' : ''}" data-size="${z.id}" aria-pressed="${z.id === size}">
@@ -1503,6 +1507,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     const longer = mins(hit) !== mins(service);
     service = hit;
     $$('#segService .opt').forEach(x => x.classList.toggle('sel', x.dataset.svc === id));
+    $$('#segService input').forEach(x => x.checked = x.value === id);
     if (longer){ picked = null; step2.hidden = true; renderDays(); }
     else renderPicked();
     renderSum();
@@ -1743,8 +1748,10 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   });
 
   renderServices(); renderSizes(); renderSum(); hoursNote();
-  const wantSvc = new URLSearchParams(location.search).get('svc');
-  if (svcOf(wantSvc)) choose(wantSvc);
+  const qs = new URLSearchParams(location.search);
+  if (svcOf(qs.get('svc'))) choose(qs.get('svc'));
+  if (qs.get('tail')) tl.value = qs.get('tail').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 10);
+  if (qs.get('takeoff')){ $('#bWheels').value = qs.get('takeoff'); $('#moreToggle').setAttribute('aria-expanded', 'true'); $('#moreFields').hidden = false; }
   const want = (new URLSearchParams(location.search).get('apt') || '').toUpperCase();
   selectAirport(aptOf(want) ? want : 'SAC', false);
   load();
