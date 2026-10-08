@@ -196,9 +196,9 @@ checker reads raw HTML and the home page built its content with JavaScript. Fixe
 - **Form asks for service:** booking step 1 now reads "Service requested", in the HTML.
 - **Right airports:** SMF dropped (the checker: it's the airline hub, not a GA field). Its
   airport page is gone. SAC, MHR and MCC lead.
-- **About page with a real bio and a photo:** `about/` exists, but **his photo and bio are still
-  placeholders** (`ABOUT_PHOTO`, `ABOUT_BIO` in `tools/build_pages.py`). It shows his logo
-  until he sends a photo of himself.
+- **About page with a real bio and a photo:** `about/` ("Meet Emmanuel"; he's OK being named).
+  **Still placeholders:** his photo (a "photo coming soon" frame) and his background (one
+  holding line). Set `ABOUT_PHOTO` and `ABOUT_BACKGROUND` in `tools/build_pages.py`, re-run it.
 
 ## Local preview
 ```

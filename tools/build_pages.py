@@ -78,12 +78,19 @@ STEPS = [
   ('Photo report', 'You get after photos the moment we finish.'),
 ]
 
-# PLACEHOLDER: his own bio and photo. The mentor's site check wants a real bio and a photo
-# of him. Drop the photo in assets/ and set ABOUT_PHOTO; replace ABOUT_BIO with his words.
-ABOUT_PHOTO = None          # e.g. 'emmanuel.jpg' in assets/
-ABOUT_BIO = [
-  "AnointedSuds Aviation Detailing is run by Emmanuel, who also owns Mr. Auto Treatment, a mobile detailing company in Sacramento. AnointedSuds brings the same standard to aircraft: careful hands, the right product for every surface, and a finish you can see.",
-  "We work on the ramp or in your hangar at airports around Sacramento, and we plan around your departure, not ours. Call and you'll talk to the person doing the work.",
+# About page. He's OK being named (Elijah, 2026-10-08). Two slots are still PLACEHOLDER:
+# - ABOUT_PHOTO: a photo of him. Put it in assets/ (about 1000px tall, portrait) and set
+#   the file name. Until then the page shows a "photo coming soon" frame.
+# - ABOUT_BACKGROUND: his background in his own words (how he got into detailing, how long,
+#   what he's worked on). Until then it's one honest holding line.
+ABOUT_PHOTO = None          # e.g. 'emmanuel.jpg'
+ABOUT_INTRO = "AnointedSuds Aviation Detailing is run by Emmanuel, who also owns Mr. Auto Treatment, a mobile detailing company in Sacramento."
+ABOUT_BACKGROUND = [
+  "More about Emmanuel's background is coming soon.",
+]
+ABOUT_HOW = [
+  "AnointedSuds brings the same standard to aircraft: careful hands, the right product for every surface, and a finish you can see.",
+  "We work on the ramp or in your hangar at airports around Sacramento, and we plan around your departure, not ours. Call and you'll talk to Emmanuel, the person doing the work.",
 ]
 
 def mark_svg():
@@ -312,16 +319,20 @@ def about_page():
     ld = [{"@context":"https://schema.org","@type":"AboutPage","name":title,"url":url,"about":provider()},
           crumbs_ld((BUSINESS, SITE + "/"), ("About", url))]
     photo = (f'<img src="{up}assets/{ABOUT_PHOTO}" alt="Emmanuel, owner of AnointedSuds Aviation Detailing" loading="lazy" decoding="async">' if ABOUT_PHOTO
-             else f'<img class="logo-ph" src="{up}assets/logo-560.webp" alt="AnointedSuds Aviation Detailing logo" loading="lazy" decoding="async">')
-    bio = ''.join(f'<p>{e(p)}</p>' for p in ABOUT_BIO)
+             else '<div class="person-ph" role="img" aria-label="Photo of Emmanuel, owner of AnointedSuds, coming soon">'
+                  '<svg viewBox="0 0 120 150" aria-hidden="true"><circle cx="60" cy="52" r="26"/><path d="M14 150c0-30 20.6-50 46-50s46 20 46 50z"/></svg>'
+                  '<span>Emmanuel · Owner</span><small>Photo coming soon</small></div>')
+    bio = (f'<p class="lead-in">{e(ABOUT_INTRO)}</p>'
+           + ''.join(f'<p>{e(p)}</p>' for p in ABOUT_BACKGROUND)
+           + ''.join(f'<p>{e(p)}</p>' for p in ABOUT_HOW))
     main = hero(HERO_BG, f'<a href="{up}">AnointedSuds</a> / <span>About</span>', 'About us',
-                'Meet <em>AnointedSuds</em>', 'Aircraft cleaning and detailing in and around Sacramento, from a local owner who answers his own phone.',
+                'About <em>AnointedSuds</em>', 'Aircraft cleaning and detailing in and around Sacramento, from a local owner who answers his own phone.',
                 f'{call_btn("Call Emmanuel")}\n        <a class="btn btn-ghost" href="{up}#book">{ICON["cal"]}Book a service</a>') + f"""  <section class="sec">
     <div class="wrap two about">
       <figure class="ph portrait">{photo}</figure>
       <div>
         <span class="eye">Our story</span>
-        <h2>Treat every airplane <em>like it matters</em></h2>
+        <h2>Meet <em>Emmanuel</em></h2>
         <div class="bio">{bio}</div>
         <blockquote class="verse-q">"But seek first the kingdom of God and His righteousness, and all these things shall be added to you."<cite>Matthew 6:33</cite></blockquote>
       </div>
