@@ -15,7 +15,7 @@ import html, json, pathlib, urllib.parse
 
 SITE = 'https://www.anointedsuds.com'      # PLACEHOLDER: the real domain once he has one
 NOINDEX = True                              # True until launch, same as index.html
-PHONE_E164, PHONE_TEXT = '+19166136405', '(916) 613-6405'   # PLACEHOLDER: same as index.html
+PHONE_E164, PHONE_TEXT = '+19166780105', '(916) 678-0105'   # same as index.html
 BUSINESS = 'AnointedSuds Aviation Detailing'
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -82,7 +82,7 @@ def page(a):
     others = ' · '.join(f'<a href="../{o["slug"]}/">{o["code"]} {e(o["short"])}</a>' for o in AIRPORTS if o is not a)
     ld = [
       {"@context":"https://schema.org","@type":"Service","name":f"Aircraft detailing at {a['name']}","serviceType":"Aircraft detailing",
-       "provider":{"@type":"ProfessionalService","name":BUSINESS,"telephone":"+1-916-613-6405","url":SITE + "/"},
+       "provider":{"@type":"ProfessionalService","name":BUSINESS,"telephone":"+1-916-678-0105","url":SITE + "/"},
        "areaServed":{"@type":"Airport","name":a['name'],"iataCode":a['code'],"icaoCode":"K" + a['code']},
        "url":url,"description":desc},
       {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[

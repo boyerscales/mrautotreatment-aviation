@@ -158,7 +158,8 @@ Test with the network stubbed, never by submitting the live form.
 
 ## Before it goes live
 1. His airport list → `CFG.AIRPORTS` (with map positions).
-2. Phone and email for this business. Both are his car-business ones for now.
+2. ~~Phone and email~~ Done 2026-10-08: (916) 678-0105 and anointedsuds@gmail.com (his text).
+   That email could also be the second dashboard account (see "To make it live").
 3. Deposit amount (`CFG.DEPOSIT.AMOUNT` is what preview shows, $50 placeholder) and the
    amount on the dashboard.
 4. Hours: his car hours for now (Mon to Sat, 6am to 6pm). Online booking needs 24 hours'
