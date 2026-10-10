@@ -1163,11 +1163,12 @@ const CFG = {
   /* --- deposit. Same system as mrautotreatment.com: the dashboard reports the
          deposit it will take (0 until his Stripe is connected) and a booking goes
          straight to Stripe checkout when it's on. AMOUNT is only what preview
-         mode shows. PLACEHOLDER: the amount. */
-  DEPOSIT: { AMOUNT:50, POLICY:'It goes toward your total, and you pay the rest after the job is done.' },
+         mode shows. The real amount ($100) is set on his dashboard account. */
+  DEPOSIT: { AMOUNT:100, POLICY:'It goes toward your total, and you pay the rest after the job is done.' },
 
   /* --- booking backend: dashboard.boyerscales.com. Until a dashboard account
-         owns this slug the API answers 404 and the form runs in preview mode. */
+         owns this slug the API answers 404 and the form runs in preview mode.
+         It's a second site on the mrautotreatment account (booking_config.sites). */
   API_BASE   : 'https://dashboard.boyerscales.com',
   SLUG       : 'anointedsuds',
   STEP_MIN   : 60,
