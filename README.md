@@ -164,7 +164,7 @@ Test with the network stubbed, never by submitting the live form.
 
 ## Before it goes live
 1. His airport list → `CFG.AIRPORTS` (with map positions).
-2. ~~Phone and email~~ Done 2026-10-08: (916) 678-0105 and anointedsuds@gmail.com (his text).
+2. ~~Phone and email~~ Done 2026-10-08: (916) 678-0105 (his text). Email is now contact@anointedsuds.com (2026-10-10).
    That email could also be the second dashboard account (see "To make it live").
 3. Deposit amount (`CFG.DEPOSIT.AMOUNT` is what preview shows, $50 placeholder) and the
    amount on the dashboard.
@@ -208,8 +208,8 @@ checker reads raw HTML and the home page built its content with JavaScript. Fixe
   `service` *inside* the booking `<form>` (it sat above the form before). Every field has a `name`.
 - **Three pages, About in the nav:** the nav's Services and About go to `services/` and
   `about/`, and every subpage has the same nav (Home, Services, Airports, About, Book).
-- **Business email on his own domain (open):** he needs `contact@anointedsuds.com`. Once it
-  forwards to anointedsuds@gmail.com, change `EMAIL` in CFG and re-run `prerender_home.py`.
+- **Business email on his own domain:** `contact@anointedsuds.com` (his text, 2026-10-10). It
+  forwards through Namecheap email (MX on anointedsuds.com), and `EMAIL` in CFG uses it.
 
 ## Local preview
 ```
