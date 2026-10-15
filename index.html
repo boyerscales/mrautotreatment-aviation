@@ -107,7 +107,18 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .nav a{transition:color .2s}
 .nav a:hover{color:var(--ink)}
 .hdr-cta{display:flex;gap:8px;margin-left:10px}
-@media (max-width:959px){.nav{display:none}.hdr-cta{margin-left:auto}.hdr-text{display:none}}
+/* phone menu: the nav folds into this under 960px, so About and the rest are one tap away (Emmanuel, 2026-10-14) */
+.mnav{display:none;position:relative}
+.mnav summary{list-style:none;width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:12px;border:1px solid var(--line2);background:rgba(0,0,0,.35);cursor:pointer}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav summary span{display:block;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .25s}
+.mnav[open] summary span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.mnav[open] summary span:nth-child(2){opacity:0}
+.mnav[open] summary span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mnav nav{position:absolute;right:0;top:calc(100% + 10px);min-width:210px;display:grid;padding:8px;border-radius:16px;border:1px solid var(--line2);background:#0a0a09;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.mnav nav a{display:flex;align-items:center;min-height:48px;padding:0 14px;border-radius:10px;font-weight:700;font-size:15.5px;color:var(--ink)}
+.mnav nav a:hover{background:rgba(255,255,255,.06);color:var(--gold)}
+@media (max-width:959px){.nav{display:none}.hdr-cta{margin-left:auto}.hdr-text{display:none}.mnav{display:block}}
 @media (max-width:400px){.brand svg.mk{width:40px;height:40px}.brand-txt b{font-size:16px}.brand-txt small{font-size:6.6px;letter-spacing:.28em}}
 
 /* ---------- hero ---------- */
@@ -624,6 +635,9 @@ input[type=datetime-local].inp{color-scheme:dark}
       <a class="btn btn-ghost btn-sm hdr-text" data-sms href="sms:+19166780105?&amp;body=Hi%20AnointedSuds%2C%20I&#x27;d%20like%20a%20quote%20on%20a%20detail.%20Tail%20number%3A%20"><svg class="i"><use href="#i-msg"/></svg>Text us</a>
       <a class="btn btn-gold btn-sm" data-tel href="tel:+19166780105"><svg class="i"><use href="#i-phone"/></svg><span>Call</span></a>
     </div>
+    <details class="mnav" id="mnav"><summary aria-label="Menu"><span></span><span></span><span></span></summary>
+      <nav aria-label="Menu"><a href="#tour">Walkaround</a><a href="services/">Services</a><a href="#airports">Airports</a><a href="about/">About</a><a href="#book">Book</a><a href="#faq">FAQ</a></nav>
+    </details>
   </div>
 </header>
 
@@ -633,7 +647,7 @@ input[type=datetime-local].inp{color-scheme:dark}
 <section class="hero" id="hero" aria-label="Introduction">
   <div class="hero-bg" id="heroBg" aria-hidden="true"><img src="https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=1800&q=72"
     srcset="https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=900&q=70 900w, https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=1800&q=72 1800w, https://images.unsplash.com/photo-1566212774847-025968e5bf56?auto=format&fit=crop&w=2600&q=68 2600w"
-    sizes="100vw" alt="" fetchpriority="high" decoding="async"></div>
+    sizes="100vw" alt="Business jet tail silhouetted against a golden sunset, aircraft detailing in Sacramento" fetchpriority="high" decoding="async"></div>
   <div class="wrap">
     <div class="hero-copy" id="heroCopy">
       <span class="eye hero-eye rv">AnointedSuds Aviation Detailing</span>
@@ -644,7 +658,7 @@ input[type=datetime-local].inp{color-scheme:dark}
         <a class="btn btn-ghost" href="#book"><svg class="i"><use href="#i-cal"/></svg>Book a service</a>
       </div>
       <div class="hero-sub rv" style="--d:4">
-        <a data-tel href="tel:+19166780105"><span data-phone>(916) 678-0105</span></a><span class="sep"></span><a data-sms href="sms:+19166780105?&amp;body=Hi%20AnointedSuds%2C%20I&#x27;d%20like%20a%20quote%20on%20a%20detail.%20Tail%20number%3A%20"><svg class="i"><use href="#i-msg"/></svg>Text us</a><span class="sep sep-w"></span><a class="walk" href="#tour"><svg class="i"><use href="#i-down"/></svg>Take the walkaround</a>
+        <a data-sms href="sms:+19166780105?&amp;body=Hi%20AnointedSuds%2C%20I&#x27;d%20like%20a%20quote%20on%20a%20detail.%20Tail%20number%3A%20"><svg class="i"><use href="#i-msg"/></svg>Text us</a><span class="sep sep-w"></span><a class="walk" href="#tour"><svg class="i"><use href="#i-down"/></svg>Take the walkaround</a>
       </div>
     </div>
     <div class="hero-visual" id="heroVisual" aria-hidden="true">
@@ -652,7 +666,7 @@ input[type=datetime-local].inp{color-scheme:dark}
       <div class="stage" id="stage">
         <div class="intro">
           <div class="tilt" id="tilt">
-            <img src="assets/logo-1100.webp" alt="" width="1100" height="1100" fetchpriority="high">
+            <img src="assets/logo-1100.webp" alt="AnointedSuds Aviation Detailing logo: a silver jet in a gold medallion" width="1100" height="1100" fetchpriority="high">
             <div class="orbit"><div class="ring"><svg class="jet"><use href="#jet"/></svg></div></div>
           </div>
         </div>
@@ -708,7 +722,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     <div id="svcList">
     <article class="svc">
       <div class="ph rv"><div class="ph-in" data-tilt="">
-        <img src="https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" srcset="https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=700&amp;q=70 700w, https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=1200&amp;q=70 1200w, https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=1700&amp;q=66 1700w" sizes="(max-width:859px) 100vw, 50vw" alt="Cream leather seats in a private jet cabin" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" srcset="https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=700&amp;q=70 700w, https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=1200&amp;q=70 1200w, https://images.unsplash.com/photo-1768346564210-f382cdf18375?auto=format&amp;fit=crop&amp;w=1700&amp;q=66 1700w" sizes="(max-width:859px) 100vw, 50vw" alt="Cream leather seats in a private jet cabin after interior detailing at Sacramento Executive Airport (SAC)" loading="lazy" decoding="async">
       </div><span class="num">01 / 03</span></div>
       <div>
         <span class="eye rv">Service 01</span>
@@ -725,7 +739,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     </article>
     <article class="svc">
       <div class="ph rv"><div class="ph-in" data-tilt="">
-        <img src="https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" srcset="https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=700&amp;q=70 700w, https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=1200&amp;q=70 1200w, https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=1700&amp;q=66 1700w" sizes="(max-width:859px) 100vw, 50vw" alt="A white private jet on a runway" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" srcset="https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=700&amp;q=70 700w, https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=1200&amp;q=70 1200w, https://images.unsplash.com/photo-1783098269685-49990ec0f9c9?auto=format&amp;fit=crop&amp;w=1700&amp;q=66 1700w" sizes="(max-width:859px) 100vw, 50vw" alt="White private jet on the runway after an exterior dry wash at Sacramento Mather Airport (MHR)" loading="lazy" decoding="async">
       </div><span class="num">02 / 03</span></div>
       <div>
         <span class="eye rv">Service 02</span>
@@ -742,7 +756,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     </article>
     <article class="svc">
       <div class="ph rv"><div class="ph-in" data-tilt="">
-        <img src="https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" srcset="https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=700&amp;q=70 700w, https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=1200&amp;q=70 1200w, https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=1700&amp;q=66 1700w" sizes="(max-width:859px) 100vw, 50vw" alt="A private jet cabin aisle with carpet and leather seats" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" srcset="https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=700&amp;q=70 700w, https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=1200&amp;q=70 1200w, https://images.unsplash.com/photo-1768346564233-d71f37bd19b6?auto=format&amp;fit=crop&amp;w=1700&amp;q=66 1700w" sizes="(max-width:859px) 100vw, 50vw" alt="Private jet cabin aisle with freshly extracted carpet at McClellan Airfield (MCC)" loading="lazy" decoding="async">
       </div><span class="num">03 / 03</span></div>
       <div>
         <span class="eye rv">Service 03</span>
@@ -940,7 +954,7 @@ input[type=datetime-local].inp{color-scheme:dark}
 
 <!-- ============================== PRICING / CALL ============================== -->
 <section class="band" id="pricing">
-  <div class="bg" id="bandBg"><img src="https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=1600&q=70" srcset="https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=800&q=70 800w, https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=1600&q=70 1600w, https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=2200&q=68 2200w" sizes="100vw" alt="" loading="lazy" decoding="async"></div>
+  <div class="bg" id="bandBg"><img src="https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=1600&q=70" srcset="https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=800&q=70 800w, https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=1600&q=70 1600w, https://images.unsplash.com/photo-1566212775038-532d06eda485?auto=format&fit=crop&w=2200&q=68 2200w" sizes="100vw" alt="Airplane in golden-hour light, aircraft detailing quotes for Placer County and Yolo County airports" loading="lazy" decoding="async"></div>
   <div class="wrap">
     <span class="eye rv">Pricing</span>
     <h2 class="disp rv" style="--d:1">Every aircraft gets <em>its own quote</em></h2>
@@ -1053,7 +1067,7 @@ input[type=datetime-local].inp{color-scheme:dark}
 <!-- ============================== FINALE ============================== -->
 <section class="finale" id="finale">
   <div class="wrap">
-    <div class="seal rv" aria-hidden="true"><img src="assets/logo-560.webp" alt="" width="560" height="560" loading="lazy"></div>
+    <div class="seal rv" aria-hidden="true"><img src="assets/logo-560.webp" alt="AnointedSuds gold medallion seal with the Matthew 6:33 verse" width="560" height="560" loading="lazy"></div>
     <h2 class="disp rv" style="--d:1">Clean airplane, <em>on time</em></h2>
     <p class="lead rv" style="--d:2">Call for a quote, or book your time online in under a minute.</p>
     <div class="cta-row rv" style="--d:3">
@@ -1125,15 +1139,15 @@ const CFG = {
          services/<slug>/, built by tools/build_pages.py. PLACEHOLDER minutes. */
   SERVICES: [
     { id:'interior', slug:'interior-cabin-detailing', label:'Interior Cabin Detail', short:'Interior cabin', minutes:180,
-      photo:'1768346564210-f382cdf18375', alt:'Cream leather seats in a private jet cabin',
+      photo:'1768346564210-f382cdf18375', alt:'Cream leather seats in a private jet cabin after interior detailing at Sacramento Executive Airport (SAC)',
       blurb:'Cabins are full of delicate materials, so every surface gets the right product and the right touch. Seats, tables, side panels, galley, lav and every high-touch spot, cleaned with aviation-safe products.',
       incl:['Full cabin vacuum','Seats and armrests cleaned','Tray tables and work surfaces','Side panels and cabin walls','Cockpit wipe-down, non-sensitive areas','Galley surfaces','Lavatory cleaned and sanitized','Interior windows','Trash removed','Spot treatment for stains'] },
     { id:'exterior', slug:'exterior-dry-wash', label:'Exterior Dry Wash', short:'Exterior dry wash', minutes:180,
-      photo:'1783098269685-49990ec0f9c9', alt:'A white private jet on a runway',
+      photo:'1783098269685-49990ec0f9c9', alt:'White private jet on the runway after an exterior dry wash at Sacramento Mather Airport (MHR)',
       blurb:'A waterless wash that takes the grime off without hoses on the ramp. Bugs, exhaust film, oil and ramp dirt come off with aviation-approved products that protect your paint. Ideal between trips.',
       incl:['Complete exterior dry wash','Bugs and ramp grime removed','Leading edges cleaned','Fuselage and tail wiped down','Engine nacelles and pylons','Landing gear wipe-down','Windows and windscreen, acrylic-safe','Finishing detail spray for shine'] },
     { id:'carpet', slug:'carpet-shampoo-extraction', label:'Carpet Shampoo & Extraction', short:'Carpet shampoo', minutes:120,
-      photo:'1768346564233-d71f37bd19b6', alt:'A private jet cabin aisle with carpet and leather seats',
+      photo:'1768346564233-d71f37bd19b6', alt:'Private jet cabin aisle with freshly extracted carpet at McClellan Airfield (MCC)',
       blurb:'Cabin carpet takes every boarding. We pre-treat, shampoo and hot-water extract to pull out embedded dirt, lift stains and leave the cabin smelling clean.',
       incl:['Carpet condition check','Full vacuum','Stain pre-treatment','Deep shampoo','Hot-water extraction','Embedded dirt pulled out','Odor treatment','Fibers groomed to an even finish'] },
   ],
@@ -1749,10 +1763,16 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   });
 
   renderServices(); renderSizes(); renderSum(); hoursNote();
+  // the phone menu closes once a link in it is tapped, or on a tap anywhere else
+  const mnav = $('#mnav');
+  mnav.addEventListener('click', ev => { if (ev.target.closest('a')) mnav.open = false; });
+  document.addEventListener('click', ev => { if (mnav.open && !mnav.contains(ev.target)) mnav.open = false; });
   const qs = new URLSearchParams(location.search);
   if (svcOf(qs.get('svc'))) choose(qs.get('svc'));
   if (qs.get('tail')) tl.value = qs.get('tail').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 10);
-  if (qs.get('takeoff')){ $('#bWheels').value = qs.get('takeoff'); $('#moreToggle').setAttribute('aria-expanded', 'true'); $('#moreFields').hidden = false; }
+  if (qs.get('takeoff')) $('#bWheels').value = qs.get('takeoff');
+  if (qs.get('service')) $('#bNotes').value = qs.get('service').slice(0, 300);
+  if (qs.get('takeoff') || qs.get('service')){ $('#moreToggle').setAttribute('aria-expanded', 'true'); $('#moreFields').hidden = false; }
   const want = (new URLSearchParams(location.search).get('apt') || '').toUpperCase();
   selectAirport(aptOf(want) ? want : 'SAC', false);
   load();

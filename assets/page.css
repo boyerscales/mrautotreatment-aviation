@@ -93,23 +93,37 @@ h1 em,h2 em{font-style:normal;color:var(--gold)}
 .bio p{color:#d4d0c7;margin:0 0 16px}
 .verse-q{margin:26px 0 0;padding-left:18px;border-left:2px solid var(--gold);font:italic 20px/1.45 'Instrument Serif',serif;color:#e7e3da}
 .verse-q cite{display:block;margin-top:8px;font:700 12px/1 Manrope,sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-/* header nav (hidden on phones: the phone bar covers it) */
+/* header nav; on phones it folds into the menu button (.mnav) */
 .hdr .wrap > .pnav{display:flex;gap:26px;margin-left:auto;margin-right:14px;font-size:14px;font-weight:600;color:var(--mute)}
 .pnav a:hover{color:var(--ink)}
 /* the form at the bottom of every page */
 .quote{border-top:1px solid var(--line)}
-.qform{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:12px;align-items:end;margin-top:28px;padding:22px;border-radius:20px;border:1px solid var(--line);background:var(--card)}
+.qform{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin-top:28px;padding:22px;border-radius:20px;border:1px solid var(--line);background:var(--card)}
 .qform .f{display:grid;gap:7px}
 .qform label{font-size:13px;font-weight:700;color:#d4d0c7}
 .qform select,.qform input{height:50px;width:100%;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:#050505;color:var(--ink);font:500 15px Manrope,sans-serif;color-scheme:dark}
+.qform .f-req{grid-column:1/-1}
+.qform textarea{width:100%;min-height:140px;padding:14px;border-radius:12px;border:1px solid var(--line2);background:#050505;color:var(--ink);font:500 15px/1.5 Manrope,sans-serif;resize:vertical;color-scheme:dark}
+.qform textarea::placeholder{color:var(--dim)}
 .qform input#qTail{text-transform:uppercase;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
-.qform select:focus,.qform input:focus{outline:none;border-color:var(--gold)}
-.qform .btn{height:50px}
+.qform select:focus,.qform input:focus,.qform textarea:focus{outline:none;border-color:var(--gold)}
+.qform .btn{height:50px;grid-column:1/-1;justify-self:start;padding-left:28px;padding-right:28px}
 .qnote{margin:16px 0 0;color:var(--mute);font-size:14.5px}
 .qnote a{color:var(--gold);font-weight:700}
-@media (max-width:1000px){.qform{grid-template-columns:repeat(2,minmax(0,1fr))}.qform .btn{grid-column:1/-1}}
-@media (max-width:859px){.hdr .wrap > .pnav{display:none}}
-@media (max-width:520px){.qform{grid-template-columns:minmax(0,1fr);padding:18px}}
+@media (max-width:1000px){.qform{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* phone menu: the nav folds into this under 860px, so About and the rest are one tap away */
+.mnav{display:none;position:relative;margin-left:8px}
+.mnav summary{list-style:none;width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:12px;border:1px solid var(--line2);cursor:pointer}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav summary span{display:block;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .25s}
+.mnav[open] summary span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.mnav[open] summary span:nth-child(2){opacity:0}
+.mnav[open] summary span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mnav nav{position:absolute;right:0;top:calc(100% + 10px);min-width:200px;display:grid;padding:8px;border-radius:16px;border:1px solid var(--line2);background:#0a0a09;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.mnav nav a{display:flex;align-items:center;min-height:48px;padding:0 14px;border-radius:10px;font-weight:700;font-size:15.5px;color:var(--ink)}
+.mnav nav a:hover{background:rgba(255,255,255,.06);color:var(--gold)}
+@media (max-width:859px){.hdr .wrap > .pnav{display:none}.mnav{display:block}.hdr .wrap > .btn{margin-left:auto}}
+@media (max-width:520px){.qform{grid-template-columns:minmax(0,1fr);padding:18px}.qform .btn{justify-self:stretch}}
 /* phone bar */
 .bar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:30;display:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px;border-radius:999px;background:rgba(14,14,13,.84);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line2)}
 .bar a{position:relative;isolation:isolate;overflow:hidden;height:50px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px}
