@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#000000">
+<title>Leave a review | AnointedSuds Aviation Detailing</title>
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--font);-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;min-height:100dvh;padding:0 0 calc(32px + env(safe-area-inset-bottom))}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+.top{display:flex;align-items:center;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 20px 14px;border-bottom:1px solid var(--line);text-decoration:none}
+.top img{width:auto;height:44px;display:block}
+.top img.round{border-radius:50%}
+.top span{font-weight:600;font-size:15px;letter-spacing:-.01em}
+main{width:min(100%,520px);margin:0 auto;padding:28px 20px 0}
+h1{font-size:30px;line-height:1.08;font-weight:600;letter-spacing:-.03em;margin:0 0 10px;text-wrap:balance}
+.lead{color:var(--ink2);margin:0 0 24px}
+.lead b{color:var(--ink);font-weight:600}
+.k{display:block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:0 0 8px}
+.field{margin-bottom:22px}
+.field input{width:100%;height:52px;background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r);padding:0 14px;font-size:16px;outline:none}
+.field input:focus{border-color:var(--ink)}
+.days{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin:0 -20px 14px;padding:2px 20px}
+.days::-webkit-scrollbar{display:none}
+.day{flex:0 0 64px;border:1px solid var(--line2);background:none;border-radius:var(--r);padding:10px 0 9px;cursor:pointer;text-align:center}
+.day .dow{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.day .num{display:block;font-size:22px;font-weight:600;line-height:1.2;margin:3px 0 1px}
+.day .mon{display:block;font-size:11.5px;color:var(--ink3)}
+.day.sel{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.day.sel .dow,.day.sel .mon{color:#55524d}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px}
+.slot{position:relative;border:1px solid var(--line2);background:none;border-radius:var(--r);padding:13px 4px;cursor:pointer;font-size:15px;font-weight:500}
+.slot.sel{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.slot .now{display:block;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-top:2px}
+.empty{grid-column:1/-1;color:var(--ink3);font-size:14.5px;padding:6px 0}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:56px;border:0;border-radius:var(--rb);cursor:pointer;font-weight:600;text-decoration:none}
+.btn-acc{background:var(--acc);color:var(--acc-ink)}
+.btn-acc:hover{background:var(--acc2)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn-line{background:transparent;color:var(--ink);border:1px solid var(--line2);margin-top:10px}
+.err{color:var(--bad);font-size:14px;min-height:20px;margin:10px 0 0}
+.help{color:var(--ink3);font-size:14px;margin:22px 0 0}
+.help a{color:var(--ink2)}
+.stars{font-size:26px;letter-spacing:6px;color:var(--acc);margin:6px 0 22px}
+.center{text-align:center}
+.center .top{justify-content:center}
+@media (min-width:640px){main{padding-top:56px}h1{font-size:38px}.slots{grid-template-columns:repeat(4,1fr)}}
+
+:root{--bg:#000;--bg2:#0d0d0c;--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+  --ink:#f4f1ea;--ink2:#a19d95;--ink3:#6b6862;--acc:#e0b45c;--acc2:#ecc77d;--acc-ink:#1b1306;--bad:#ff7a70;
+  --font:Manrope,system-ui,-apple-system,sans-serif;--r:14px;--rb:999px}
+.btn-acc{background:linear-gradient(180deg,#ecc77d,#d9a94e);box-shadow:inset 0 1px 0 rgba(255,244,214,.6),0 14px 30px -16px rgba(224,180,92,.9)}
+.btn-acc:hover{background:linear-gradient(180deg,#f1d08c,#dfb158)}
+.day.sel,.slot.sel{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.day.sel .dow,.day.sel .mon{color:#5a4415}
+</style>
+</head>
+<body class="center">
+<a class="top" href="/"><img src="/assets/logo-180.png" alt="" width="56" height="56"><span>AnointedSuds Aviation Detailing</span></a>
+<main>
+  <h1>How did we do?</h1>
+  <p class="lead">Thanks for trusting AnointedSuds with your aircraft. A quick Google review takes about 30 seconds and helps a small business more than you'd think.</p>
+  <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+  <a class="btn btn-acc" id="go" href="#" rel="noopener" hidden>Leave a Google review</a>
+  <p class="help">Questions? Call or text <a href="tel:+19166780105">(916) 678-0105</a>.</p>
+</main>
+<script>
+// The Google link comes from the dashboard Settings, so it stays current without a redeploy.
+const SITE = {"slug": "anointedsuds", "api": "https://dashboard.boyerscales.com", "url": ""};
+fetch(`${SITE.api}/api/public/review/${SITE.slug}`).then(r => r.ok ? r.json() : null).then(j => {
+  const url = (j && /^https:\/\//.test(j.url || '')) ? j.url : SITE.url;
+  const go = document.getElementById('go');
+  if (url){ go.href = url; go.hidden = false; }
+}).catch(() => {});
+</script>
+</body>
+</html>
