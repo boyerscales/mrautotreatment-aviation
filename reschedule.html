@@ -51,6 +51,11 @@ h1{font-size:30px;line-height:1.08;font-weight:600;letter-spacing:-.03em;margin:
 .btn:disabled{opacity:.45;cursor:default}
 .btn-line{background:transparent;color:var(--ink);border:1px solid var(--line2);margin-top:10px}
 .err{color:var(--bad);font-size:14px;min-height:20px;margin:10px 0 0}
+.linkbtn{display:block;width:100%;margin-top:8px;padding:12px;border:0;background:none;color:var(--ink2);font-size:15px;
+  text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.cbox{margin-top:16px;padding:18px;border:1px solid var(--line2);border-radius:var(--r);text-align:center}
+.cbox p{margin:0 0 14px}
+.btn-bad{background:var(--bad);color:#160606}
 .help{color:var(--ink3);font-size:14px;margin:22px 0 0}
 .help a{color:var(--ink2)}
 .stars{font-size:26px;letter-spacing:6px;color:var(--acc);margin:6px 0 22px}
@@ -91,10 +96,22 @@ h1{font-size:30px;line-height:1.08;font-weight:600;letter-spacing:-.03em;margin:
     <div class="slots" id="slots"></div>
     <button class="btn btn-acc" id="save" type="submit" disabled>Update appointment</button>
     <p class="err" id="err" role="alert"></p>
+    <button class="linkbtn" id="cOpen" type="button">Cancel appointment</button>
+    <div class="cbox" id="cBox" hidden>
+      <p id="cAsk">Cancel this appointment?</p>
+      <button class="btn btn-bad" id="cYes" type="button">Yes, cancel it</button>
+      <button class="linkbtn" id="cNo" type="button">Keep my appointment</button>
+    </div>
   </form>
 
+  <section id="gone" hidden>
+    <h1>This appointment is canceled</h1>
+    <p class="lead">Nothing else to do. Want a new time? Book again anytime.</p>
+    <a class="btn btn-acc" href="/#book">Book a new time</a>
+  </section>
+
   <section id="done" hidden>
-    <h1>You're all set</h1>
+    <h1 id="doneTitle">You're all set</h1>
     <p class="lead" id="doneMsg"></p>
     <a class="btn btn-line" href="/">Back to AnointedSuds Aviation Detailing</a>
   </section>
@@ -209,10 +226,35 @@ $('form').addEventListener('submit', async e => {
   }
 });
 
+// Cancel: one tap to ask, one to confirm. The shop gets told right away.
+$('cOpen').addEventListener('click', () => {
+  $('cAsk').innerHTML = current ? `Cancel your appointment on <b>${fmtKey(current)}</b>?` : 'Cancel this appointment?';
+  $('cOpen').hidden = true; $('cBox').hidden = false;
+  $('cBox').scrollIntoView({block:'nearest', behavior:'smooth'});
+});
+$('cNo').addEventListener('click', () => { $('cBox').hidden = true; $('cOpen').hidden = false; });
+$('cYes').addEventListener('click', async () => {
+  const btn = $('cYes'); btn.disabled = true; btn.textContent = 'Canceling...'; $('err').textContent = '';
+  try {
+    const r = await fetch(base + '/cancel', {method:'POST'});
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || 'Could not cancel, please try again.');
+    $('form').hidden = true;
+    $('doneTitle').textContent = 'Your appointment is canceled';
+    $('doneMsg').innerHTML = `We've been told, so you don't need to do anything else. Want a new time later? <a href="/#book">Book again here</a>.`;
+    $('done').hidden = false;
+    scrollTo(0, 0);
+  } catch (err) {
+    $('err').textContent = err.message;
+    btn.disabled = false; btn.textContent = 'Yes, cancel it';
+  }
+});
+
 async function load(){
   try {
     if (!token) throw new Error('no token');
     const r = await fetch(base);
+    if (r.status === 410){ $('loading').hidden = true; $('gone').hidden = false; return; }
     if (!r.ok) throw new Error('http ' + r.status);
     C = await r.json();
   } catch {
@@ -227,7 +269,7 @@ async function load(){
   if (!$('name').value) $('name').value = (C.appointment && C.appointment.name) || '';
   if (!day) day = current ? current.slice(0,10) : ymd(shopNow());
   $('lead').innerHTML = current
-    ? `You're booked for <b>${fmtKey(current)}</b>. Pick a new time below, then tap update.`
+    ? `You're booked for <b>${fmtKey(current)}</b>. Pick a new time below, then tap update. Can't make it? You can cancel at the bottom.`
     : 'Pick a new time below, then tap update.';
   $('loading').hidden = true; $('form').hidden = false;
   renderDays(); renderSlots();
