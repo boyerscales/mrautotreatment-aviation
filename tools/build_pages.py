@@ -15,8 +15,8 @@ Edit the lists below, then re-run. Keep SERVICES in step with CFG.SERVICES in in
 """
 import html, json, pathlib, urllib.parse
 
-SITE = 'https://www.anointedsuds.com'      # PLACEHOLDER: the real domain once he has one
-NOINDEX = True                              # True until launch, same as index.html
+SITE = 'https://www.anointedsuds.com'
+NOINDEX = False                             # live on www.anointedsuds.com, let Google index it
 PHONE_E164, PHONE_TEXT = '+19166780105', '(916) 678-0105'   # same as index.html
 BUSINESS = 'AnointedSuds Aviation Detailing'
 
