@@ -392,6 +392,8 @@ MEMBERSHIP_CSS = """
 .m-price b{font-size:42px;font-weight:700;letter-spacing:-.035em;line-height:1;color:var(--gold)}
 .m-price span{color:var(--mute);font-size:14px}
 .m-note{margin:6px 0 0;color:var(--mute);font-size:14px}
+.m-covers{margin:14px 0 0;font-size:14.5px;color:#d4d0c7}
+.m-covers b{display:block;font:700 12px/1.2 Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
 .m-plan .ticks{margin:18px 0 22px;flex:1;font-size:15px}
 .m-plan .btn{width:100%}
 .m-wait{color:var(--mute);margin:30px 0 0}
@@ -457,13 +459,14 @@ function renderPlans(){
       <h3>${esc(p.name)}</h3>
       <p class="m-price"><b>${usd(p.price)}</b><span>a month</span></p>
       ${p.vehicle_note ? `<p class="m-note">${esc(p.vehicle_note)}</p>` : ''}
+      ${p.covers && p.covers.length ? `<p class="m-covers"><b>Covers</b>${p.covers.map(esc).join(', ')}</p>` : ''}
       ${p.includes && p.includes.length ? `<ul class="ticks">${p.includes.map(x => `<li>${CHECK}${esc(x)}</li>`).join('')}</ul>` : '<div style="flex:1;min-height:22px"></div>'}
       <button type="button" class="btn ${plan && plan.id === p.id ? 'btn-gold' : 'btn-ghost'}" data-pick="${esc(p.id)}">${plan && plan.id === p.id ? 'Selected' : 'Choose this plan'}</button>
     </article>`).join('');
   $$('[data-pick]').forEach(b => b.addEventListener('click', () => { pick(b.dataset.pick); $('#mJoin').scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' }); }));
   $('#mSeg').innerHTML = plans.map(p => `<button type="button" data-seg="${esc(p.id)}"${plan && plan.id === p.id ? ' class="sel"' : ''}>${esc(p.name)}<small>${usd(p.price)} a month</small></button>`).join('');
   $$('[data-seg]').forEach(b => b.addEventListener('click', () => pick(b.dataset.seg)));
-  if (plan) $('#mSum').innerHTML = `<div><span>${esc(plan.name)}</span><b>${usd(plan.price)} a month</b></div><div><span>Charged</span><b>After each month's service</b></div><div><span>Due today</span><b>Nothing</b></div>`;
+  if (plan) $('#mSum').innerHTML = `<div><span>${esc(plan.name)}</span><b>${usd(plan.price)} a month</b></div><div><span>Charged</span><b>After your plan's detail each month</b></div><div><span>Due today</span><b>Nothing</b></div>`;
 }
 function pick(id){ plan = plans.find(p => p.id === id) || plan; renderPlans(); }
 async function loadPlans(){
@@ -510,7 +513,7 @@ function showJoined(token){
   const box = $('#mOk');
   box.innerHTML = `<strong>You're a member.</strong>
     <p>Your card is saved. Nothing was charged today. We'll text you a confirmation with a link to cancel anytime.</p>
-    <p>Book your detail whenever you're ready. As a member you don't pay the booking deposit.</p>
+    <p>Book your detail whenever you're ready. As a member you don't pay the booking deposit for your plan's detail.</p>
     <div class="cta"><a class="btn btn-gold" href="../#book">${CAL}Book my detail</a><a class="btn btn-ghost" href="tel:${M.TEL}">${PHONE_IC}Call</a></div>
     ${token ? '<button type="button" class="m-link" id="mCancelMine">Changed your mind? Cancel your membership</button>' : ''}`;
   box.hidden = false;
@@ -560,8 +563,8 @@ def membership_page():
     steps = [
       ('Pick a plan', 'Choose the plan that fits your aircraft and how often it flies.'),
       ('Save a card', "On Stripe's secure page. Nothing is charged today, and we never see the number."),
-      ('Book your detail', "Online or by phone, any time each month. Members don't pay the booking deposit."),
-      ('Billed after the service', 'When your detail that month is done, your card is charged the plan price. No detail that month, no charge.'),
+      ('Book your detail', "Online or by phone, any time each month. Members don't pay the booking deposit for their plan's detail."),
+      ('Billed after the service', "When your plan's detail that month is done, your card is charged the plan price. No plan detail that month, no charge. Anything outside your plan is quoted and paid like normal."),
       ('Cancel anytime', f'Use the link in your confirmation text, or call or text {PHONE_TEXT}.'),
     ]
     steps_list = ''.join(f'<li><span>0{i+1}</span><div><h3>{e(n)}</h3><p>{e(d)}</p></div></li>' for i, (n, d) in enumerate(steps))

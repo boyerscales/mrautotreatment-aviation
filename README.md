@@ -166,10 +166,11 @@ Test with the network stubbed, never by submitting the live form.
 `membership/` (built by `tools/build_pages.py`, so re-run it after edits) is a monthly
 maintenance membership: pick a plan, give the tail number, make and model and home airport,
 save a card on Stripe (nothing charged). The dashboard charges the plan price after the first
-job each month that's marked done; no job that month, no charge. Members skip the booking
-deposit, and the confirmation text has a cancel link to `membership/?cancel=...`.
+job each month that the plan covers and is marked done; no covered job that month, no charge,
+and anything else is quoted and paid like normal. Members skip the booking deposit on their
+plan's detail, and the confirmation text has a cancel link to `membership/?cancel=...`.
 
-- **Plans and prices come from his AnointedSuds dashboard** (Settings > Membership plans), read
+- **Plans, prices and the services each covers come from his AnointedSuds dashboard** (Settings > Membership plans), read
   from `/api/public/membership/anointedsuds`. This is the one place on the site with prices,
   and only the ones he types in himself.
 - With no plans, or before his Stripe is connected there, it says "Memberships are coming
