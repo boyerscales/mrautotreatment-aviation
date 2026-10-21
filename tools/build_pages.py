@@ -10,6 +10,8 @@
 - services/ and services/<slug>/  the three core services, one page each. The service
   buttons on the home page point here. Book buttons pick the service (?svc=interior#book).
 - about/  his bio and photo.
+- membership/  monthly membership sign-up. Plans and prices come from his dashboard
+  (Settings > Membership plans), never from here; with none set it says "coming soon".
 
 Edit the lists below, then re-run. Keep SERVICES in step with CFG.SERVICES in index.html. Before launch: set SITE to the real domain and NOINDEX = False.
 """
@@ -102,6 +104,7 @@ ICON = {
   'cal': '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
   'msg': '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
   'check': '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>',
+  'lock': '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   'arrow': '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 }
 e = html.escape
@@ -156,8 +159,9 @@ def quote_form(up, svc=None, apt=None):
   </section>
 """
 
-def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None):
-    """Head, header, footer and phone bar shared by every generated page. `up` is the path back to the site root."""
+def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None, quote=True):
+    """Head, header, footer and phone bar shared by every generated page. `up` is the path back to the site root.
+    quote=False leaves off the quote form at the bottom, for a page that has its own form."""
     sms = f"sms:{PHONE_E164}?&body=" + urllib.parse.quote(sms_body)
     robots = '<meta name="robots" content="noindex">\n' if NOINDEX else ''
     lds = ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in ld)
@@ -184,14 +188,14 @@ def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None):
 <body>
 <header class="hdr"><div class="wrap">
   <a class="brand" href="{up}" aria-label="{BUSINESS}, home">{mark_svg()}<span class="brand-txt"><b>Anointed<span>Suds</span></b><small>AVIATION DETAILING</small></span></a>
-  <nav class="pnav" aria-label="Main"><a href="{up}">Home</a><a href="{up}services/">Services</a><a href="{up}#airports">Airports</a><a href="{up}about/">About</a><a href="{up}#book">Book</a></nav>
+  <nav class="pnav" aria-label="Main"><a href="{up}">Home</a><a href="{up}services/">Services</a><a href="{up}#airports">Airports</a><a href="{up}membership/">Membership</a><a href="{up}about/">About</a><a href="{up}#book">Book</a></nav>
   <a class="btn btn-gold btn-sm" href="tel:{PHONE_E164}">{ICON['phone']}Call</a>
 </div></header>
 <main>
-{main}{quote_form(up, svc, apt)}</main>
+{main}{quote_form(up, svc, apt) if quote else ''}</main>
 <footer class="foot"><div class="wrap">
   <p><b>{BUSINESS}</b> · Aircraft cleaning and detailing in and around Sacramento · <a href="tel:{PHONE_E164}">{PHONE_TEXT}</a></p>
-  <p class="links"><a href="{up}services/">Services</a> · <a href="{up}about/">About</a> · <a href="{up}#airports">Airports</a> · <a href="{up}#book">Book online</a></p>
+  <p class="links"><a href="{up}services/">Services</a> · <a href="{up}about/">About</a> · <a href="{up}#airports">Airports</a> · <a href="{up}membership/">Membership</a> · <a href="{up}#book">Book online</a></p>
   <p class="verse">"Seek first the kingdom of God." Matthew 6:33</p>
 </div></footer>
 <nav class="bar" aria-label="Call, text or book">
@@ -377,6 +381,253 @@ def about_page():
 """
     return shell(up, title, desc, url, ld, main, f'{up}#book', "Hi AnointedSuds, I'd like a quote on a detail. Tail number: ")
 
+# The membership page's own look, on top of page.css: plan cards, the sign-up form,
+# and the cancel panel a member's confirmation text links to.
+MEMBERSHIP_CSS = """
+.m-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:12px;margin-top:30px}
+.m-plan{display:flex;flex-direction:column;padding:24px;border-radius:20px;border:1px solid var(--line);background:var(--card);transition:border-color .25s,box-shadow .25s}
+.m-plan.sel{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.m-plan h3{margin:0;font-size:19px;letter-spacing:-.01em}
+.m-price{display:flex;align-items:baseline;gap:8px;margin:14px 0 2px}
+.m-price b{font-size:42px;font-weight:700;letter-spacing:-.035em;line-height:1;color:var(--gold)}
+.m-price span{color:var(--mute);font-size:14px}
+.m-note{margin:6px 0 0;color:var(--mute);font-size:14px}
+.m-plan .ticks{margin:18px 0 22px;flex:1;font-size:15px}
+.m-plan .btn{width:100%}
+.m-wait{color:var(--mute);margin:30px 0 0}
+.m-soon{margin-top:30px;padding:26px;border-radius:20px;border:1px solid var(--gline);background:rgba(224,180,92,.06)}
+.m-soon b{display:block;font-size:24px;letter-spacing:-.02em;line-height:1.2;margin-bottom:8px}
+.m-soon p{margin:0 0 18px;color:#d4d0c7}
+.m-soon a.inl{color:var(--gold);font-weight:700}
+.m-form{padding:24px;border-radius:20px;border:1px solid var(--line);background:var(--card)}
+.m-form h2{margin:0 0 6px;font-size:clamp(1.6rem,3vw,2.1rem)}
+.m-sub{color:var(--mute);font-size:14.5px;margin:0 0 20px}
+.m-k{display:block;font-size:13px;font-weight:700;color:#d4d0c7;margin:0 0 7px}
+.m-seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:18px}
+.m-seg button{text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line2);background:#050505;color:var(--ink);font:700 15px Manrope,sans-serif;cursor:pointer;display:grid;gap:2px}
+.m-seg button small{font-weight:500;color:var(--mute);font-size:13px}
+.m-seg button.sel{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.m-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}
+.m-f{display:grid;gap:7px;margin-bottom:14px}
+.m-f label{font-size:13px;font-weight:700;color:#d4d0c7}
+.m-f input,.m-f select{height:50px;width:100%;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:#050505;color:var(--ink);font:500 16px Manrope,sans-serif;color-scheme:dark}
+.m-f input:focus,.m-f select:focus{outline:none;border-color:var(--gold)}
+.m-f input.tail{text-transform:uppercase;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
+.m-sum{margin:6px 0 18px;border-top:1px solid var(--line2)}
+.m-sum div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--mute)}
+.m-sum b{color:var(--ink);text-align:right}
+.m-form .btn{width:100%}
+.m-form .btn[disabled]{opacity:.6}
+.m-err{color:#ff8a7a;font-size:14px;margin:10px 0 0;min-height:1px}
+.m-fine{color:var(--mute);font-size:13.5px;margin:12px 0 0;text-align:center}
+.m-ok strong{display:block;font-size:26px;letter-spacing:-.02em;margin-bottom:10px}
+.m-ok p{color:#d4d0c7;margin:0 0 12px}
+.m-ok .cta{margin:18px 0}
+.m-link{background:none;border:0;color:var(--mute);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:500 14px Manrope,sans-serif;padding:0}
+.m-terms{margin:18px 0 0;color:#d4d0c7;font-size:14.5px}
+.m-terms b{color:var(--gold)}
+.m-cancel{max-width:560px}
+.btn-bad{color:#ff9a8c;background:transparent;border:1px solid rgba(255,122,112,.5)}
+.m-toast{position:fixed;left:50%;top:84px;z-index:40;transform:translateX(-50%);padding:14px 18px;border-radius:14px;background:#121211;border:1px solid var(--line2);font-size:15px;box-shadow:0 20px 50px rgba(0,0,0,.6);width:max-content;max-width:calc(100% - 32px)}
+[hidden]{display:none!important}
+@media (max-width:520px){.m-row{grid-template-columns:minmax(0,1fr)}.m-form{padding:18px}}
+"""
+
+# __TOKENS__ are filled in by membership_page(). Plain string, so the JS keeps its own braces.
+MEMBERSHIP_JS = r"""
+const M = { API: 'https://dashboard.boyerscales.com', SLUG: 'anointedsuds', PHONE: '__PHONE_TEXT__', TEL: '__PHONE_E164__' };
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const usd = n => '$' + (Number.isInteger(Number(n)) ? Number(n) : Number(n).toFixed(2));
+const digits = s => String(s||'').replace(/\D/g,'');
+const fmtPhone = v => { const d = digits(v).replace(/^1(?=\d{10})/,'').slice(0,10); if (d.length < 4) return d; if (d.length < 7) return `(${d.slice(0,3)}) ${d.slice(3)}`; return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`; };
+const CHECK = '__ICON_CHECK__', PHONE_IC = '__ICON_PHONE__', CAL = '__ICON_CAL__';
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const qs = new URLSearchParams(location.search);
+// Tokens and flags come off the address bar once read, so a shared link never carries them.
+if ([...qs.keys()].some(k => ['done','m','canceled','cancel'].includes(k))) history.replaceState(null, '', location.pathname + location.hash);
+function toast(text, ms){ const t = document.createElement('div'); t.className = 'm-toast'; t.setAttribute('role','status'); t.textContent = text; document.body.append(t); setTimeout(() => t.remove(), ms); }
+
+let plans = [], plan = null;
+function renderPlans(){
+  if (!plans.length){ $('#mList').hidden = true; $('#mSoon').hidden = false; $('#mJoin').hidden = true; return; }
+  $('#mList').innerHTML = plans.map(p => `
+    <article class="m-plan${plan && plan.id === p.id ? ' sel' : ''}">
+      <h3>${esc(p.name)}</h3>
+      <p class="m-price"><b>${usd(p.price)}</b><span>a month</span></p>
+      ${p.vehicle_note ? `<p class="m-note">${esc(p.vehicle_note)}</p>` : ''}
+      ${p.includes && p.includes.length ? `<ul class="ticks">${p.includes.map(x => `<li>${CHECK}${esc(x)}</li>`).join('')}</ul>` : '<div style="flex:1;min-height:22px"></div>'}
+      <button type="button" class="btn ${plan && plan.id === p.id ? 'btn-gold' : 'btn-ghost'}" data-pick="${esc(p.id)}">${plan && plan.id === p.id ? 'Selected' : 'Choose this plan'}</button>
+    </article>`).join('');
+  $$('[data-pick]').forEach(b => b.addEventListener('click', () => { pick(b.dataset.pick); $('#mJoin').scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' }); }));
+  $('#mSeg').innerHTML = plans.map(p => `<button type="button" data-seg="${esc(p.id)}"${plan && plan.id === p.id ? ' class="sel"' : ''}>${esc(p.name)}<small>${usd(p.price)} a month</small></button>`).join('');
+  $$('[data-seg]').forEach(b => b.addEventListener('click', () => pick(b.dataset.seg)));
+  if (plan) $('#mSum').innerHTML = `<div><span>${esc(plan.name)}</span><b>${usd(plan.price)} a month</b></div><div><span>Charged</span><b>After each month's service</b></div><div><span>Due today</span><b>Nothing</b></div>`;
+}
+function pick(id){ plan = plans.find(p => p.id === id) || plan; renderPlans(); }
+async function loadPlans(){
+  try {
+    const r = await fetch(`${M.API}/api/public/membership/${M.SLUG}`);
+    const j = r.ok ? await r.json() : {};
+    plans = Array.isArray(j.plans) ? j.plans : [];
+    if (j.terms){ $('#mTerms').innerHTML = '<b>Good to know.</b> ' + esc(j.terms); $('#mTerms').hidden = false; }
+  } catch (_) { plans = []; }
+  plan = plans[0] || null;
+  if (plans.length) $('#mJoin').hidden = false;
+  renderPlans();
+}
+const ph = $('#mPhone');
+ph.addEventListener('input', () => { const end = ph.selectionStart === ph.value.length; ph.value = fmtPhone(ph.value); if (end) ph.setSelectionRange(ph.value.length, ph.value.length); });
+$('#mApt').addEventListener('change', e => { $('#mAptOtherF').hidden = e.target.value !== 'other'; });
+$('#mForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const err = $('#mErr'); err.textContent = '';
+  const v = id => $(id).value.trim();
+  const name = v('#mName'), phone = v('#mPhone'), email = v('#mEmail'), tail = v('#mTail').toUpperCase(), model = v('#mModel'), fbo = v('#mFbo');
+  const aptSel = $('#mApt'), apt = aptSel.value === 'other' ? v('#mAptOther') : aptSel.options[aptSel.selectedIndex].text;
+  const fail = (msg, sel) => { err.textContent = msg; const el = sel && $(sel); if (el) el.focus(); };
+  if (!plan) return fail('Pick a plan first.');
+  if (name.length < 2) return fail('We need your name.', '#mName');
+  if (digits(phone).length < 10) return fail('That number looks short. We text your confirmation there.', '#mPhone');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('We need an email for your receipts.', '#mEmail');
+  if (!/^[A-Z0-9][A-Z0-9-]{1,9}$/.test(tail)) return fail("What's the tail number? Like N123AB.", '#mTail');
+  if (model.length < 2) return fail('What do you fly? Make and model is perfect.', '#mModel');
+  if (!apt) return fail('Which airport is it based at?', '#mAptOther');
+  const btn = $('#mBtn');
+  btn.disabled = true; btn.textContent = 'Opening secure checkout…';
+  try {
+    const r = await fetch(`${M.API}/api/public/membership/${M.SLUG}`, { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ plan_id: plan.id, name, phone, email, vehicle: [tail, model].filter(Boolean).join(' · '), address: [apt, fbo].filter(Boolean).join(' · ').slice(0, 160) }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok && /^https:\/\/checkout\.stripe\.com\//.test(j.checkout_url || '')){ location.href = j.checkout_url; return; }
+    fail(j.error || `Something went wrong. Please call ${M.PHONE}.`);
+  } catch (_) { fail(`Couldn't reach us just now. Please call or text ${M.PHONE}.`); }
+  btn.disabled = false; btn.innerHTML = '__ICON_LOCK__Save my card';
+});
+function showJoined(token){
+  $('#mJoin').hidden = false; $('#mForm').hidden = true;
+  const box = $('#mOk');
+  box.innerHTML = `<strong>You're a member.</strong>
+    <p>Your card is saved. Nothing was charged today. We'll text you a confirmation with a link to cancel anytime.</p>
+    <p>Book your detail whenever you're ready. As a member you don't pay the booking deposit.</p>
+    <div class="cta"><a class="btn btn-gold" href="../#book">${CAL}Book my detail</a><a class="btn btn-ghost" href="tel:${M.TEL}">${PHONE_IC}Call</a></div>
+    ${token ? '<button type="button" class="m-link" id="mCancelMine">Changed your mind? Cancel your membership</button>' : ''}`;
+  box.hidden = false;
+  const c = $('#mCancelMine'); if (c) c.addEventListener('click', () => openCancel(token));
+  requestAnimationFrame(() => $('#mJoin').scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' }));
+}
+async function openCancel(token){
+  $('#mPage').hidden = true; $('#mCancelSec').hidden = false; scrollTo(0, 0);
+  const box = $('#mCancelBox');
+  box.innerHTML = '<p class="m-sub">Loading your membership…</p>';
+  let m = null;
+  try { const r = await fetch(`${M.API}/api/public/membership/${M.SLUG}/m/${encodeURIComponent(token)}`); if (r.ok) m = await r.json(); } catch (_) {}
+  if (!m){ box.innerHTML = `<h2>This link doesn't work</h2><p class="m-sub">It may be old, or typed in wrong. Call or text <a class="inl" href="tel:${M.TEL}" style="color:var(--gold);font-weight:700">${M.PHONE}</a> and we'll take care of it.</p>`; return; }
+  if (m.status === 'canceled'){ box.innerHTML = `<h2>Already canceled</h2><p class="m-sub">Your ${esc(m.plan)} membership is canceled. Your card won't be charged again.</p><a class="btn btn-ghost" href="./">See the plans</a>`; return; }
+  box.innerHTML = `<h2>Cancel your membership?</h2>
+    <p class="m-sub">${m.first ? esc(m.first) + ', this' : 'This'} cancels your ${esc(m.plan)} membership (${usd(m.price)} a month). Your card won't be charged again. Anything already charged stays charged.</p>
+    <button type="button" class="btn btn-bad" id="mCancelGo">Cancel my membership</button>
+    <p class="m-err" id="mCancelErr" role="alert"></p>
+    <p class="m-fine"><a class="m-link" href="./">Keep my membership</a></p>`;
+  $('#mCancelGo').addEventListener('click', async function(){
+    this.disabled = true; this.textContent = 'Canceling…';
+    try {
+      const r = await fetch(`${M.API}/api/public/membership/${M.SLUG}/m/${encodeURIComponent(token)}/cancel`, { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || '');
+      box.innerHTML = `<h2>Membership canceled</h2><p class="m-sub">Done. Your card won't be charged again. You're welcome back anytime.</p><a class="btn btn-gold" href="../#book">${CAL}Book a detail</a>`;
+    } catch (e) {
+      this.disabled = false; this.textContent = 'Cancel my membership';
+      $('#mCancelErr').textContent = e.message || `Couldn't cancel just now. Please call or text ${M.PHONE}.`;
+    }
+  });
+}
+if (qs.get('cancel')) openCancel(qs.get('cancel'));
+else {
+  loadPlans().then(() => { if (qs.get('done') === '1') showJoined(qs.get('m') || ''); });
+  if (qs.get('canceled') === '1') toast("No card was saved, so you're not signed up yet. Try again anytime.", 8000);
+}
+"""
+
+def membership_page():
+    up = '../'
+    url = f"{SITE}/membership/"
+    title = 'Monthly Aircraft Detailing Membership | AnointedSuds'
+    desc = f"A monthly maintenance membership for your aircraft at Sacramento-area airports. Save a card, get your detail, and you're billed after each month's service. Cancel anytime. {PHONE_TEXT}."
+    ld = [crumbs_ld((BUSINESS, SITE + "/"), ("Membership", url))]
+    apt_opts = ''.join(f'<option value="{a["code"]}">{a["code"]} · {e(a["short"])}</option>' for a in AIRPORTS) + '<option value="other">Somewhere else</option>'
+    steps = [
+      ('Pick a plan', 'Choose the plan that fits your aircraft and how often it flies.'),
+      ('Save a card', "On Stripe's secure page. Nothing is charged today, and we never see the number."),
+      ('Book your detail', "Online or by phone, any time each month. Members don't pay the booking deposit."),
+      ('Billed after the service', 'When your detail that month is done, your card is charged the plan price. No detail that month, no charge.'),
+      ('Cancel anytime', f'Use the link in your confirmation text, or call or text {PHONE_TEXT}.'),
+    ]
+    steps_list = ''.join(f'<li><span>0{i+1}</span><div><h3>{e(n)}</h3><p>{e(d)}</p></div></li>' for i, (n, d) in enumerate(steps))
+    js = (MEMBERSHIP_JS.replace('__PHONE_TEXT__', PHONE_TEXT).replace('__PHONE_E164__', PHONE_E164)
+          .replace('__ICON_CHECK__', ICON['check']).replace('__ICON_PHONE__', ICON['phone'])
+          .replace('__ICON_CAL__', ICON['cal']).replace('__ICON_LOCK__', ICON['lock']))
+    main = f"""  <style>{MEMBERSHIP_CSS}</style>
+  <section class="sec m-cancel-sec" id="mCancelSec" hidden>
+    <div class="wrap"><div class="m-form m-cancel" id="mCancelBox" aria-live="polite"></div></div>
+  </section>
+  <div id="mPage">
+""" + hero(HERO_BG, f'<a href="{up}">AnointedSuds</a> / <span>Membership</span>', 'Monthly membership',
+                'Keep it ready to fly, <em>every month</em>',
+                "Pick a plan and save a card. Book your detail each month like always, and your card is charged the plan price after the service is done. Cancel anytime.",
+                f'<a class="btn btn-gold" href="#plans">{ICON["arrow"]}See the plans</a>\n        {call_btn("Call us", "btn-ghost")}') + f"""  <section class="sec" id="plans">
+    <div class="wrap">
+      <span class="eye">The plans</span>
+      <h2>Monthly plans for <em>your aircraft</em></h2>
+      <div class="m-plans" id="mList"><p class="m-wait">Loading the plans…</p></div>
+      <div class="m-soon" id="mSoon" hidden>
+        <b>Memberships are coming soon.</b>
+        <p>Call or text <a class="inl" href="tel:{PHONE_E164}">{PHONE_TEXT}</a> and we'll set you up.</p>
+        <div class="cta">{call_btn('Call')}<a class="btn btn-ghost" href="sms:{PHONE_E164}?&amp;body={urllib.parse.quote("Hi AnointedSuds, I'd like to sign up for a monthly membership. Tail number: ")}">{ICON['msg']}Text us</a></div>
+      </div>
+    </div>
+  </section>
+  <section class="sec" id="mJoin" hidden>
+    <div class="wrap two">
+      <div class="m-form">
+        <form id="mForm" novalidate>
+          <h2>Join</h2>
+          <p class="m-sub">Takes about a minute. Your card goes on Stripe's secure page next.</p>
+          <span class="m-k">Your plan</span>
+          <div class="m-seg" id="mSeg"></div>
+          <div class="m-row">
+            <div class="m-f"><label for="mName">Name</label><input id="mName" autocomplete="name" placeholder="First and last name"></div>
+            <div class="m-f"><label for="mPhone">Mobile</label><input id="mPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(916) 555-0123"></div>
+          </div>
+          <div class="m-f"><label for="mEmail">Email</label><input id="mEmail" type="email" inputmode="email" autocomplete="email" placeholder="Where your receipts go"></div>
+          <div class="m-row">
+            <div class="m-f"><label for="mTail">Tail number</label><input class="tail" id="mTail" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="10" placeholder="N123AB"></div>
+            <div class="m-f"><label for="mModel">Make and model</label><input id="mModel" autocomplete="off" placeholder="Citation CJ3"></div>
+          </div>
+          <div class="m-f"><label for="mApt">Where it's based</label><select id="mApt">{apt_opts}</select></div>
+          <div class="m-f" id="mAptOtherF" hidden><label for="mAptOther">Which airport?</label><input id="mAptOther" autocomplete="off" placeholder="Name or code"></div>
+          <div class="m-f"><label for="mFbo">FBO, hangar or parking spot (optional)</label><input id="mFbo" autocomplete="off" placeholder="FBO name, hangar 12"></div>
+          <div class="m-sum" id="mSum"></div>
+          <button type="submit" class="btn btn-gold" id="mBtn">{ICON['lock']}Save my card</button>
+          <p class="m-err" id="mErr" role="alert"></p>
+          <p class="m-fine">Nothing is charged today. Stripe keeps your card, we never see the number.</p>
+        </form>
+        <div class="m-ok" id="mOk" hidden></div>
+      </div>
+      <div>
+        <span class="eye">How it works</span>
+        <h2>Billed after the work, <em>never before</em></h2>
+        <ol class="steps">{steps_list}</ol>
+        <p class="m-terms" id="mTerms" hidden></p>
+      </div>
+    </div>
+  </section>
+  </div>
+  <script>{js}</script>
+"""
+    return shell(up, title, desc, url, ld, main, f'{up}#book', "Hi AnointedSuds, I'd like to sign up for a monthly membership. Tail number: ", quote=False)
+
 def write(path, text):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text)
@@ -388,12 +639,13 @@ def main():
         write(ROOT / 'services' / s['slug'] / 'index.html', service_page(s))
     write(ROOT / 'services' / 'index.html', services_index())
     write(ROOT / 'about' / 'index.html', about_page())
-    urls = ([SITE + '/', SITE + '/services/'] + [f"{SITE}/services/{s['slug']}/" for s in SERVICES] + [SITE + '/about/']
+    write(ROOT / 'membership' / 'index.html', membership_page())
+    urls = ([SITE + '/', SITE + '/services/'] + [f"{SITE}/services/{s['slug']}/" for s in SERVICES] + [SITE + '/about/', SITE + '/membership/']
             + [f"{SITE}/aircraft-detailing/{a['slug']}/" for a in AIRPORTS])
     (ROOT / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + ''.join(f'  <url><loc>{u}</loc></url>\n' for u in urls) + '</urlset>\n')
     (ROOT / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n')
-    print(f'{len(AIRPORTS)} airport pages, {len(SERVICES)} service pages + services index, about page, sitemap.xml, robots.txt')
+    print(f'{len(AIRPORTS)} airport pages, {len(SERVICES)} service pages + services index, about page, membership page, sitemap.xml, robots.txt')
 
 if __name__ == '__main__':
     main()

@@ -387,6 +387,13 @@ h2.disp{font-size:clamp(2.1rem,4.8vw,3.75rem)}
 .book-aside ul{list-style:none;margin:0 0 28px;padding:0;display:grid;gap:12px}
 .book-aside li{display:flex;gap:12px;align-items:flex-start;color:#d4d0c7;font-size:15px;line-height:1.45}
 .book-aside li svg{color:var(--gold);margin-top:2px}
+/* ---------- membership block (home) ---------- */
+.member{padding:clamp(56px,7vw,96px) 0 0}
+.member-card{display:grid;gap:26px;padding:clamp(24px,4vw,48px);border-radius:24px;border:1px solid var(--gline);background:var(--card);align-items:end}
+.member-card .disp{font-size:clamp(2rem,4.4vw,3.4rem);margin:16px 0 16px}
+.member-card .lead{margin:0}
+@media (min-width:860px){.member-card{grid-template-columns:minmax(0,1.5fr) auto}}
+@media (max-width:859px){.member-card .cta-row .btn{flex:1 1 220px}}
 .callbox{padding:18px 20px;border-radius:16px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .callbox span{color:var(--mute);font-size:14px}
 .callbox a{font:500 18px/1 'IBM Plex Mono',monospace;color:var(--gold)}
@@ -616,6 +623,7 @@ input[type=datetime-local].inp{color-scheme:dark}
       <a href="#tour">Walkaround</a>
       <a href="services/">Services</a>
       <a href="#airports">Airports</a>
+      <a href="membership/">Membership</a>
       <a href="about/">About</a>
       <a href="#book">Book</a>
       <a href="#faq">FAQ</a>
@@ -950,6 +958,24 @@ input[type=datetime-local].inp{color-scheme:dark}
   </div>
 </section>
 
+<!-- ============================== MEMBERSHIP ==============================
+     Plans and prices live on membership/, loaded from his dashboard. -->
+<section class="sec member" id="membership">
+  <div class="wrap">
+    <div class="member-card rv">
+      <div>
+        <span class="eye">Monthly membership</span>
+        <h2 class="disp">Keep it ready to fly, <em>every month</em></h2>
+        <p class="lead">Pick a plan and save a card. You're billed after each month's detail, members skip the booking deposit, and you can cancel anytime.</p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="membership/"><svg class="i"><use href="#i-repeat"/></svg>See membership plans</a>
+        <a class="btn btn-ghost" data-tel href="tel:+19166780105"><svg class="i"><use href="#i-phone"/></svg>Call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================== BOOK ============================== -->
 <section class="sec book" id="book">
   <div class="wrap book-grid">
@@ -1079,6 +1105,7 @@ input[type=datetime-local].inp{color-scheme:dark}
         <li><a data-sms href="sms:+19166780105?&amp;body=Hi%20AnointedSuds%2C%20I&#x27;d%20like%20a%20quote%20on%20a%20detail.%20Tail%20number%3A%20">Text us</a></li>
         <li><a data-mail data-email href="mailto:contact@anointedsuds.com">contact@anointedsuds.com</a></li>
         <li><a href="#book">Book online</a></li>
+        <li><a href="membership/">Membership</a></li>
         <li><a href="about/">About us</a></li>
       </ul></div>
     </div>
