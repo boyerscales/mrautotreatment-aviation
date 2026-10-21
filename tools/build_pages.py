@@ -50,21 +50,30 @@ AIRPORTS = [
 
 
 # The three core services. Same names, photos and lists as CFG.SERVICES in index.html.
+# Each photo shows up in several places, so it has an alt for each one (hero, services-page card,
+# service-page photo), and the home page has its own in CFG. Emmanuel asked (2026-10-14) that no two
+# images share alt text and that they name different cities and airports.
 SERVICES = [
   dict(id='interior', slug='interior-cabin-detailing', label='Interior Cabin Detail', short='Interior cabin detailing',
-       h1='Interior cabin detailing', photo='1768346564210-f382cdf18375', alt='Cream leather seats in a private jet cabin',
+       h1='Interior cabin detailing', photo='1768346564210-f382cdf18375', alt='Clean leather seats and tables in a private jet cabin, detailed at University Airport in Davis (EDU)',
+       alt_hero='Private jet cabin with cream leather seating, interior cabin detailing in Sacramento',
+       alt_card='Leather club seats and side panels in a business jet cabin, interior detailing in Lincoln (LHM)',
        card='Seats, tables, side panels, galley, lav and every high-touch spot, cleaned with aviation-safe products.',
        blurb='Cabins are full of delicate materials, so every surface gets the right product and the right touch. Seats, tables, side panels, galley, lav and every high-touch spot, cleaned with aviation-safe products.',
        why='Your passengers notice the cabin first. Leather, wood veneer, plastics and soft goods each need their own product, and nothing harsh goes near the cockpit, so we clean the non-sensitive areas only and leave avionics alone.',
        incl=['Full cabin vacuum','Seats and armrests cleaned','Tray tables and work surfaces','Side panels and cabin walls','Cockpit wipe-down, non-sensitive areas','Galley surfaces','Lavatory cleaned and sanitized','Interior windows','Trash removed','Spot treatment for stains']),
   dict(id='exterior', slug='exterior-dry-wash', label='Exterior Dry Wash', short='Exterior dry wash',
-       h1='Exterior aircraft dry wash', photo='1783098269685-49990ec0f9c9', alt='A white private jet on a runway',
+       h1='Exterior aircraft dry wash', photo='1783098269685-49990ec0f9c9', alt='White private jet on the runway after a waterless dry wash at McClellan Airfield (MCC)',
+       alt_hero='White business jet on a runway, exterior dry wash in Rancho Cordova',
+       alt_card='White private jet ready for an exterior dry wash at Auburn Municipal Airport (AUN)',
        card='A waterless wash that takes off bugs, exhaust film, oil and ramp grime, safe on the paint.',
        blurb='A waterless wash that takes the grime off without hoses on the ramp. Bugs, exhaust film, oil and ramp dirt come off with aviation-approved products that protect your paint. Ideal between trips.',
        why="Most ramps don't allow a wet wash, and you shouldn't have to tow to a wash rack. A dry wash is done right where you're parked, lifts the grime instead of grinding it in, and leaves a protective layer behind.",
        incl=['Complete exterior dry wash','Bugs and ramp grime removed','Leading edges cleaned','Fuselage and tail wiped down','Engine nacelles and pylons','Landing gear wipe-down','Windows and windscreen, acrylic-safe','Finishing detail spray for shine']),
   dict(id='carpet', slug='carpet-shampoo-extraction', label='Carpet Shampoo & Extraction', short='Carpet shampoo and extraction',
-       h1='Aircraft carpet shampoo and extraction', photo='1768346564233-d71f37bd19b6', alt='A private jet cabin aisle with carpet and leather seats',
+       h1='Aircraft carpet shampoo and extraction', photo='1768346564233-d71f37bd19b6', alt='Cabin carpet aisle between leather seats, deep-cleaned at Lincoln Regional Airport (LHM)',
+       alt_hero='Business jet cabin aisle and carpet, carpet shampoo and extraction in Woodland',
+       alt_card='Jet cabin carpet and leather seats after shampoo and extraction at Yolo County Airport (DWA)',
        card='Pre-treat, shampoo and hot-water extraction to lift stains and embedded dirt.',
        blurb='Cabin carpet takes every boarding. We pre-treat, shampoo and hot-water extract to pull out embedded dirt, lift stains and leave the cabin smelling clean.',
        why='Vacuuming only gets the top of the pile. Extraction rinses the dirt and residue out of the fibers, so stains are less likely to wick back and the carpet dries clean instead of sticky.',
@@ -133,22 +142,24 @@ def how_it_works(up):
 """
 
 def quote_form(up, svc=None, apt=None):
-    """The form at the bottom of every page. It sends service, airport, tail number and takeoff
-    time to the home page's booking (?svc=&apt=&tail=&takeoff=#book), which fills them in, so the
-    visitor picks a time and adds their name and number there. Nothing personal goes in the URL."""
-    svc_opts = ''.join(f'<option value="{s["id"]}"{" selected" if s["id"] == svc else ""}>{e(s["label"])}</option>' for s in SERVICES)
-    svc_opts += f'<option value="full"{" selected" if svc == "full" else ""}>Full Detail, Inside &amp; Out</option>'
+    """The form at the bottom of every page. It sends airport, tail number, takeoff time and the
+    service request to the home page's booking (?apt=&tail=&takeoff=&service=#book), which fills
+    them in (the request goes into the notes), so the visitor picks a time and adds their name and
+    number there. The service request is a large open text box, last in the form (Emmanuel,
+    2026-10-14). On a service page a hidden svc also picks that service. Nothing personal goes in
+    the URL."""
+    svc_hidden = f'<input type="hidden" name="svc" value="{svc}">' if svc else ''
     apt_opts = ''.join(f'<option value="{a["code"]}"{" selected" if a["code"] == apt else ""}>{a["code"]} · {e(a["short"])}</option>' for a in AIRPORTS)
     return f"""  <section class="sec quote" id="quote">
     <div class="wrap">
       <span class="eye">Book online</span>
       <h2>Need aircraft detailing in <em>Sacramento?</em></h2>
-      <p class="lead">Tell us the service, the aircraft and when it flies, then pick a time. We call you with your quote.</p>
+      <p class="lead">Tell us the aircraft, when it flies and what you need, then pick a time. We call you with your quote.</p>
       <form class="qform" action="{up}#book" method="get">
-        <div class="f"><label for="qSvc">Service requested</label><select id="qSvc" name="svc">{svc_opts}</select></div>
         <div class="f"><label for="qApt">Airport</label><select id="qApt" name="apt">{apt_opts}</select></div>
         <div class="f"><label for="qTail">Tail number</label><input id="qTail" name="tail" required maxlength="10" pattern="[A-Za-z0-9][A-Za-z0-9\\-]{{1,9}}" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="N123AB"></div>
         <div class="f"><label for="qTakeoff">Takeoff date and time</label><input id="qTakeoff" name="takeoff" type="datetime-local"></div>
+        <div class="f f-req"><label for="qReq">Service requested</label><textarea id="qReq" name="service" rows="5" maxlength="300" placeholder="Tell us what you need: interior, exterior, carpet, or anything else. Problem spots, when it flies next, questions."></textarea></div>{svc_hidden}
         <button class="btn btn-gold" type="submit">{ICON['cal']}Pick a time</button>
       </form>
       <p class="qnote">Parked somewhere else, or need it sooner than 24 hours? Call <a href="tel:{PHONE_E164}">{PHONE_TEXT}</a>.</p>
@@ -186,6 +197,9 @@ def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None):
   <a class="brand" href="{up}" aria-label="{BUSINESS}, home">{mark_svg()}<span class="brand-txt"><b>Anointed<span>Suds</span></b><small>AVIATION DETAILING</small></span></a>
   <nav class="pnav" aria-label="Main"><a href="{up}">Home</a><a href="{up}services/">Services</a><a href="{up}#airports">Airports</a><a href="{up}about/">About</a><a href="{up}#book">Book</a></nav>
   <a class="btn btn-gold btn-sm" href="tel:{PHONE_E164}">{ICON['phone']}Call</a>
+  <details class="mnav"><summary aria-label="Menu"><span></span><span></span><span></span></summary>
+    <nav aria-label="Menu"><a href="{up}">Home</a><a href="{up}services/">Services</a><a href="{up}#airports">Airports</a><a href="{up}about/">About</a><a href="{up}#book">Book</a></nav>
+  </details>
 </div></header>
 <main>
 {main}{quote_form(up, svc, apt)}</main>
@@ -203,9 +217,9 @@ def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None):
 </html>
 """
 
-def hero(bg, crumbs, eye, h1, lead, cta):
+def hero(bg, alt, crumbs, eye, h1, lead, cta):
     return f"""  <section class="hero">
-    <div class="bg" aria-hidden="true"><img src="{bg}" alt="" fetchpriority="high"></div>
+    <div class="bg" aria-hidden="true"><img src="{bg}" alt="{e(alt)}" fetchpriority="high"></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb">{crumbs}</nav>
       <span class="eye">{eye}</span>
@@ -236,7 +250,8 @@ def airport_page(a):
       crumbs_ld((BUSINESS, SITE + "/"), (f"Aircraft detailing at {a['code']}", url)),
     ]
     svc = ''.join(f'<article class="card"><h3><a href="{up}services/{s["slug"]}/">{e(s["label"])}</a></h3><p>{e(s["card"])}</p></article>' for s in SERVICES)
-    main = hero(HERO_BG, f'<a href="{up}">AnointedSuds</a> / <span>{a["code"]}</span>',
+    main = hero(HERO_BG, f"Business jet tail against the setting sun, aircraft detailing at {a['name']} ({a['code']}) in {a['city']}",
+                f'<a href="{up}">AnointedSuds</a> / <span>{a["code"]}</span>',
                 f"{a['code']} · K{a['code']} · {e(a['city'])}", f"Aircraft detailing at <em>{e(a['name'])}</em>",
                 f"{e(a['about'])} {e(a['angle'])}",
                 f'{call_btn()}\n        <a class="btn btn-ghost" href="{book}">{ICON["cal"]}Book at {a["code"]}</a>') + f"""  <section class="sec">
@@ -275,7 +290,7 @@ def service_page(s):
     incl = ''.join(f'<li>{ICON["check"]}{e(x)}</li>' for x in s['incl'])
     apts = ''.join(f'<a class="apt-link" href="{up}aircraft-detailing/{a["slug"]}/"><b>{a["code"]}</b>{e(a["name"])}</a>' for a in AIRPORTS)
     others = ' · '.join(f'<a href="../{o["slug"]}/">{e(o["label"])}</a>' for o in SERVICES if o is not s)
-    main = hero(unsplash(s['photo'], 1600), f'<a href="{up}">AnointedSuds</a> / <a href="../">Services</a> / <span>{e(s["label"])}</span>',
+    main = hero(unsplash(s['photo'], 1600), s['alt_hero'], f'<a href="{up}">AnointedSuds</a> / <a href="../">Services</a> / <span>{e(s["label"])}</span>',
                 f"Service 0{SERVICES.index(s) + 1} of 03 · Sacramento area", f"{e(s['h1'])} in <em>Sacramento</em>", e(s['blurb']),
                 f'{call_btn()}\n        <a class="btn btn-ghost" href="{book}">{ICON["cal"]}Book this service</a>') + f"""  <section class="sec">
     <div class="wrap two">
@@ -317,12 +332,13 @@ def services_index():
     desc = f"Interior cabin detailing, exterior dry wash and carpet shampoo and extraction at Sacramento-area airports. Call {PHONE_TEXT} for a quote or book online."
     ld = [crumbs_ld((BUSINESS, SITE + "/"), ("Services", url))]
     cards = ''.join(f"""<article class="card svc-card">
-        <img src="{unsplash(s['photo'], 800)}" alt="{e(s['alt'])}" decoding="async">
+        <img src="{unsplash(s['photo'], 800)}" alt="{e(s['alt_card'])}" decoding="async">
         <span class="eye">Service 0{i + 1}</span>
         <h3>{e(s['label'])}</h3><p>{e(s['card'])}</p>
         <a class="btn btn-ghost btn-sm" href="{s['slug']}/">See {e(s['short'].lower())}{ICON['arrow']}</a>
       </article>""" for i, s in enumerate(SERVICES))
-    main = hero(HERO_BG, f'<a href="{up}">AnointedSuds</a> / <span>Services</span>', 'What we do',
+    main = hero(HERO_BG, 'Jet tail silhouetted at sunset, aircraft detailing services across the Sacramento area',
+                f'<a href="{up}">AnointedSuds</a> / <span>Services</span>', 'What we do',
                 'Aircraft detailing services in <em>Sacramento</em>',
                 'Three core services, nose to tail. Every one is quoted for your aircraft, so call for pricing or book a time and we\'ll call you.',
                 f'{call_btn()}\n        <a class="btn btn-ghost" href="{up}#book">{ICON["cal"]}Book a service</a>') + f"""  <section class="sec">
@@ -350,7 +366,8 @@ def about_page():
     bio = (f'<p class="lead-in">{e(ABOUT_INTRO)}</p>'
            + ''.join(f'<p>{e(p)}</p>' for p in ABOUT_BACKGROUND)
            + ''.join(f'<p>{e(p)}</p>' for p in ABOUT_HOW))
-    main = hero(HERO_BG, f'<a href="{up}">AnointedSuds</a> / <span>About</span>', 'About us',
+    main = hero(HERO_BG, 'Private jet tail in golden light, AnointedSuds Aviation Detailing in Sacramento',
+                f'<a href="{up}">AnointedSuds</a> / <span>About</span>', 'About us',
                 'About <em>AnointedSuds</em>', 'Aircraft cleaning and detailing in and around Sacramento, from a local owner who answers his own phone.',
                 f'{call_btn("Call Emmanuel")}\n        <a class="btn btn-ghost" href="{up}#book">{ICON["cal"]}Book a service</a>') + f"""  <section class="sec">
     <div class="wrap two about">

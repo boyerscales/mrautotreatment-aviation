@@ -215,3 +215,14 @@ checker reads raw HTML and the home page built its content with JavaScript. Fixe
 ```
 python3 -m http.server 4898
 ```
+
+## His text of 2026-10-14
+- **About in the nav on phones:** the nav was hidden under 960px (860px on generated pages), so
+  phones had no way to About. Phones and tablets now get a menu button (`.mnav`) beside Call.
+  His bio and photo are still to come (`ABOUT_BACKGROUND`, `ABOUT_PHOTO` in `tools/build_pages.py`).
+- **Alt text:** every image has one and no two match; each names a different airport or city.
+  The service photos have one alt per spot (`alt`, `alt_hero`, `alt_card` in `SERVICES`, and
+  CFG.SERVICES on the home page).
+- **One call button in the home hero:** the phone-number link under Call now is gone.
+- **Service requested** on the quote form is a large open text box at the bottom of the form.
+  It goes to the home page as `?service=` and lands in the booking notes.
