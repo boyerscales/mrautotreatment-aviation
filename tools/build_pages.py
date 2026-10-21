@@ -448,7 +448,7 @@ const CHECK = '__ICON_CHECK__', PHONE_IC = '__ICON_PHONE__', CAL = '__ICON_CAL__
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const qs = new URLSearchParams(location.search);
 // Tokens and flags come off the address bar once read, so a shared link never carries them.
-if ([...qs.keys()].some(k => ['done','m','canceled','cancel'].includes(k))) history.replaceState(null, '', location.pathname + location.hash);
+if ([...qs.keys()].some(k => ['done','m','b','canceled','cancel'].includes(k))) history.replaceState(null, '', location.pathname + location.hash);
 function toast(text, ms){ const t = document.createElement('div'); t.className = 'm-toast'; t.setAttribute('role','status'); t.textContent = text; document.body.append(t); setTimeout(() => t.remove(), ms); }
 
 let plans = [], plan = null;
@@ -508,13 +508,14 @@ $('#mForm').addEventListener('submit', async e => {
   } catch (_) { fail(`Couldn't reach us just now. Please call or text ${M.PHONE}.`); }
   btn.disabled = false; btn.innerHTML = '__ICON_LOCK__Save my card';
 });
-function showJoined(token){
+function showJoined(token, bookToken){
   $('#mJoin').hidden = false; $('#mForm').hidden = true;
+  const book = /^[A-Za-z0-9_-]{16,64}$/.test(bookToken || '') ? `../?member=${encodeURIComponent(bookToken)}#book` : '../#book';
   const box = $('#mOk');
   box.innerHTML = `<strong>You're a member.</strong>
-    <p>Your card is saved. Nothing was charged today. We'll email you a link to cancel anytime, and text you a confirmation.</p>
-    <p>Book your detail whenever you're ready. As a member you don't pay the booking deposit for your plan's detail.</p>
-    <div class="cta"><a class="btn btn-gold" href="../#book">${CAL}Book my detail</a><a class="btn btn-ghost" href="tel:${M.TEL}">${PHONE_IC}Call</a></div>
+    <p>Your card is saved. Nothing was charged today. We'll email you your own booking link and a link to cancel anytime, and text you a confirmation.</p>
+    <p>Book your detail whenever you're ready. Booked from your link, your plan's detail has no deposit.</p>
+    <div class="cta"><a class="btn btn-gold" href="${book}">${CAL}Book my detail</a><a class="btn btn-ghost" href="tel:${M.TEL}">${PHONE_IC}Call</a></div>
     ${token ? '<button type="button" class="m-link" id="mCancelMine">Changed your mind? Cancel your membership</button>' : ''}`;
   box.hidden = false;
   const c = $('#mCancelMine'); if (c) c.addEventListener('click', () => openCancel(token));
@@ -548,7 +549,7 @@ async function openCancel(token){
 }
 if (qs.get('cancel')) openCancel(qs.get('cancel'));
 else {
-  loadPlans().then(() => { if (qs.get('done') === '1') showJoined(qs.get('m') || ''); });
+  loadPlans().then(() => { if (qs.get('done') === '1') showJoined(qs.get('m') || '', qs.get('b') || ''); });
   if (qs.get('canceled') === '1') toast("No card was saved, so you're not signed up yet. Try again anytime.", 8000);
 }
 """
@@ -563,7 +564,7 @@ def membership_page():
     steps = [
       ('Pick a plan', 'Choose the plan that fits your aircraft and how often it flies.'),
       ('Save a card', "On Stripe's secure page. Nothing is charged today, and we never see the number."),
-      ('Book your detail', "Online or by phone, any time each month. Members don't pay the booking deposit for their plan's detail."),
+      ('Book your detail', "Any time each month, from the booking link in your welcome email. Booked from that link, your plan's detail has no deposit. Or call or text and we'll book it with you."),
       ('Billed after the service', "When your plan's detail that month is done, your card is charged the plan price. No plan detail that month, no charge. Anything outside your plan is quoted and paid like normal."),
       ('Cancel anytime', f'Use the link in your welcome email, or call or text {PHONE_TEXT}.'),
     ]
@@ -578,7 +579,7 @@ def membership_page():
   <div id="mPage">
 """ + hero(HERO_BG, f'<a href="{up}">AnointedSuds</a> / <span>Membership</span>', 'Monthly membership',
                 'Keep it ready to fly, <em>every month</em>',
-                "Pick a plan and save a card. Book your detail each month like always, and your card is charged the plan price after the service is done. Cancel anytime.",
+                "Pick a plan and save a card. Book your detail each month from your member link, and your card is charged the plan price after the service is done. Cancel anytime.",
                 f'<a class="btn btn-gold" href="#plans">{ICON["arrow"]}See the plans</a>\n        {call_btn("Call us", "btn-ghost")}') + f"""  <section class="sec" id="plans">
     <div class="wrap">
       <span class="eye">The plans</span>

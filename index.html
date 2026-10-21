@@ -484,6 +484,7 @@ input[type=datetime-local].inp{color-scheme:dark}
 .ok .pay{padding:14px 16px;border-radius:12px;background:var(--card2);border:1px solid var(--line2);margin:0 0 16px;font-size:14px;color:#d8d3c9}
 .ok .pay b{display:block;color:var(--gold);margin-bottom:3px}
 .ok .pv{display:block;margin-top:14px;font-size:12.5px;color:var(--dim)}
+.member-line{margin:0 0 18px;padding:12px 14px;border-radius:12px;background:var(--card2);border:1px solid var(--line2);font-size:14px;line-height:1.5;color:#d8d3c9}
 @media (max-width:959px){.book-grid{grid-template-columns:minmax(0,1fr)}.book-aside{position:static}}
 
 /* ---------- FAQ ---------- */
@@ -992,6 +993,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     </aside>
 
     <div class="panel rv" style="--d:1">
+      <p class="member-line" id="memberLine" hidden></p>
       <form id="bookForm" novalidate>
       <div id="picker">
         <fieldset class="blk">
@@ -1500,6 +1502,12 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   const minutes = {};
   const mins = s => minutes[s.id] || s.minutes;
   let dep = 0, booking = false, drawn = '';
+  // A member's own booking link (?member=... from their welcome email). A service
+  // their plan covers, booked from it on their number, is their plan detail with no
+  // deposit and no quote call. The dashboard decides that; this page only says so.
+  const memberToken = (new URLSearchParams(location.search).get('member') || '').trim();
+  let member = null;                             // { first, plan, covers: [service ids] }
+  const memberJob = () => Boolean(member && member.covers.includes(service.id));
 
   const ymd  = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
   const hm2m = s => (+s.slice(0,2))*60 + (+s.slice(3,5));
@@ -1568,6 +1576,17 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   };
   function renderSum(){
     const z = sizeOf(size);
+    if (memberJob()){
+      $('#sum').innerHTML = `
+      <div><span>Service</span><b>${esc(service.label)}</b></div>
+      <div><span>Aircraft</span><b>${esc(z.label)}</b></div>
+      <div><span>Airport</span><b>${esc(aptText())}</b></div>
+      <div><span>Price</span><b>Your plan detail</b></div>
+      <div class="due"><span>Due today</span><b>Nothing</b></div>`;
+      $('#bookBtn').innerHTML = '<svg class="i"><use href="#i-lock"/></svg>Book my plan detail';
+      $('#formNote').textContent = `No deposit: it's your ${member.plan} detail. Your card on file is charged the plan price after the service is done. Use the number you signed up with.`;
+      return;
+    }
     $('#sum').innerHTML = `
       <div><span>Service</span><b>${esc(service.label)}</b></div>
       <div><span>Aircraft</span><b>${esc(z.label)}</b></div>
@@ -1698,7 +1717,29 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   }
   const drawing = () => JSON.stringify(cfg.booked) + '|' + cfg.leadHours + '|' + service.id + '|' +
     Math.floor((Date.now() + cfg.leadHours*3600000) / ((cfg.stepMinutes || 60)*60000));
-  async function load(){ await fetchSchedule(); renderDays(); drawn = drawing(); }
+  async function load(){ await fetchSchedule(); renderDays(); drawn = drawing(); loadMember(); }
+  // Who the member link is for. Right after signing up, Stripe can take a few seconds
+  // to confirm the card, so a miss is tried again twice.
+  async function loadMember(){
+    if (!/^[A-Za-z0-9_-]{16,64}$/.test(memberToken) || !live) return;
+    for (const wait of [0, 3000, 7000]){
+      if (wait) await new Promise(r => setTimeout(r, wait));
+      try {
+        const r = await fetch(`${CFG.API_BASE}/api/public/membership/${CFG.SLUG}/member/${encodeURIComponent(memberToken)}`, { referrerPolicy:'no-referrer' });
+        if (r.status !== 404 && !r.ok) return;
+        if (!r.ok) continue;
+        const j = await r.json();
+        member = { first:String(j.first || ''), plan:String(j.plan || 'membership'), covers:Array.isArray(j.covers) ? j.covers : [] };
+        const names = CHOICES.filter(s => member.covers.includes(s.id)).map(s => s.label);
+        const line = $('#memberLine');
+        line.textContent = `${member.first ? `Hi ${member.first}. ` : ''}You're booking as a ${member.plan} member${names.length ? `: ${names.join(' or ')} is your plan detail, with no deposit` : ''}.`;
+        line.hidden = false;
+        if (!memberJob() && member.covers.length && svcOf(member.covers[0])) choose(member.covers[0]);
+        renderSum();
+        return;
+      } catch (_) { return; }
+    }
+  }
   async function refresh(force){
     if (booking || form.hidden) return;
     await fetchSchedule();
@@ -1732,14 +1773,14 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     // The dashboard keeps one notes field (300 chars) and one address (160), so the
     // aviation details ride there. Customer notes go last, so they're what gets cut.
     const noteParts = [`Tail ${tail}`, type, z.label, wheelsTxt && `Takeoff ${wheelsTxt}`, email && `Email ${email}`,
-                       extras.length && `Also asked about: ${extras.join(', ')}`, 'Needs a quote', notes].filter(Boolean);
+                       extras.length && `Also asked about: ${extras.join(', ')}`, !memberJob() && 'Needs a quote', notes].filter(Boolean);
     const body = { name, phone, start:picked.key, mode:'mobile',
                    vehicle: [tail, type].filter(Boolean).join(' · '), vehicle_size: z.label,
                    address: [apt, fbo].filter(Boolean).join(' · ').slice(0, 160),
                    notes: noteParts.join(' · ').slice(0, 300),
-                   service_id: service.id, service: service.label };
+                   service_id: service.id, service: service.label, member_token: memberToken || undefined };
     const btn = $('#bookBtn');
-    btn.disabled = true; btn.textContent = dep ? 'Holding your time…' : 'Booking…';
+    btn.disabled = true; btn.textContent = dep && !memberJob() ? 'Holding your time…' : 'Booking…';
     let ok = true, checkout = '', refused = false;
     booking = true;
     if (live){
@@ -1768,7 +1809,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
       <strong>Thanks, ${esc(first.charAt(0).toUpperCase() + first.slice(1))}.</strong>
       <span class="when">${picked.date.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'})} at ${picked.text}</span>
       <span>${esc(service.label)} · ${esc(tail)}${type ? ' · ' + esc(type) : ''}<br>${esc(apt)}${fbo ? ' · ' + esc(fbo) : ''}</span>
-      <div class="pay"><b>${dep ? 'Your deposit link is on its way.' : 'Nothing to pay now.'}</b>We'll call ${esc(phone)} to confirm your time and give you your quote.</div>
+      <div class="pay">${memberJob() ? `<b>Nothing to pay now.</b>It's your ${esc(member.plan)} detail. We'll call ${esc(phone)} to confirm your time, and your card on file is charged the plan price after the service is done.` : `<b>${dep ? 'Your deposit link is on its way.' : 'Nothing to pay now.'}</b>We'll call ${esc(phone)} to confirm your time and give you your quote.`}</div>
       Need to change something? Call or text <a href="tel:${CFG.PHONE_E164}" style="color:var(--gold);font-weight:700">${CFG.PHONE_TEXT}</a>.
       ${live ? '' : '<span class="pv">Preview mode: this booking was not saved and nothing was sent.</span>'}`;
     box.classList.add('on');
