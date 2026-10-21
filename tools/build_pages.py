@@ -382,7 +382,7 @@ def about_page():
     return shell(up, title, desc, url, ld, main, f'{up}#book', "Hi AnointedSuds, I'd like a quote on a detail. Tail number: ")
 
 # The membership page's own look, on top of page.css: plan cards, the sign-up form,
-# and the cancel panel a member's confirmation text links to.
+# and the cancel panel a member's welcome email links to.
 MEMBERSHIP_CSS = """
 .m-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:12px;margin-top:30px}
 .m-plan{display:flex;flex-direction:column;padding:24px;border-radius:20px;border:1px solid var(--line);background:var(--card);transition:border-color .25s,box-shadow .25s}
@@ -512,7 +512,7 @@ function showJoined(token){
   $('#mJoin').hidden = false; $('#mForm').hidden = true;
   const box = $('#mOk');
   box.innerHTML = `<strong>You're a member.</strong>
-    <p>Your card is saved. Nothing was charged today. We'll text you a confirmation with a link to cancel anytime.</p>
+    <p>Your card is saved. Nothing was charged today. We'll email you a link to cancel anytime, and text you a confirmation.</p>
     <p>Book your detail whenever you're ready. As a member you don't pay the booking deposit for your plan's detail.</p>
     <div class="cta"><a class="btn btn-gold" href="../#book">${CAL}Book my detail</a><a class="btn btn-ghost" href="tel:${M.TEL}">${PHONE_IC}Call</a></div>
     ${token ? '<button type="button" class="m-link" id="mCancelMine">Changed your mind? Cancel your membership</button>' : ''}`;
@@ -565,7 +565,7 @@ def membership_page():
       ('Save a card', "On Stripe's secure page. Nothing is charged today, and we never see the number."),
       ('Book your detail', "Online or by phone, any time each month. Members don't pay the booking deposit for their plan's detail."),
       ('Billed after the service', "When your plan's detail that month is done, your card is charged the plan price. No plan detail that month, no charge. Anything outside your plan is quoted and paid like normal."),
-      ('Cancel anytime', f'Use the link in your confirmation text, or call or text {PHONE_TEXT}.'),
+      ('Cancel anytime', f'Use the link in your welcome email, or call or text {PHONE_TEXT}.'),
     ]
     steps_list = ''.join(f'<li><span>0{i+1}</span><div><h3>{e(n)}</h3><p>{e(d)}</p></div></li>' for i, (n, d) in enumerate(steps))
     js = (MEMBERSHIP_JS.replace('__PHONE_TEXT__', PHONE_TEXT).replace('__PHONE_E164__', PHONE_E164)

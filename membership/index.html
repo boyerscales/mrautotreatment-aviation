@@ -170,7 +170,7 @@
       <div>
         <span class="eye">How it works</span>
         <h2>Billed after the work, <em>never before</em></h2>
-        <ol class="steps"><li><span>01</span><div><h3>Pick a plan</h3><p>Choose the plan that fits your aircraft and how often it flies.</p></div></li><li><span>02</span><div><h3>Save a card</h3><p>On Stripe&#x27;s secure page. Nothing is charged today, and we never see the number.</p></div></li><li><span>03</span><div><h3>Book your detail</h3><p>Online or by phone, any time each month. Members don&#x27;t pay the booking deposit for their plan&#x27;s detail.</p></div></li><li><span>04</span><div><h3>Billed after the service</h3><p>When your plan&#x27;s detail that month is done, your card is charged the plan price. No plan detail that month, no charge. Anything outside your plan is quoted and paid like normal.</p></div></li><li><span>05</span><div><h3>Cancel anytime</h3><p>Use the link in your confirmation text, or call or text (916) 678-0105.</p></div></li></ol>
+        <ol class="steps"><li><span>01</span><div><h3>Pick a plan</h3><p>Choose the plan that fits your aircraft and how often it flies.</p></div></li><li><span>02</span><div><h3>Save a card</h3><p>On Stripe&#x27;s secure page. Nothing is charged today, and we never see the number.</p></div></li><li><span>03</span><div><h3>Book your detail</h3><p>Online or by phone, any time each month. Members don&#x27;t pay the booking deposit for their plan&#x27;s detail.</p></div></li><li><span>04</span><div><h3>Billed after the service</h3><p>When your plan&#x27;s detail that month is done, your card is charged the plan price. No plan detail that month, no charge. Anything outside your plan is quoted and paid like normal.</p></div></li><li><span>05</span><div><h3>Cancel anytime</h3><p>Use the link in your welcome email, or call or text (916) 678-0105.</p></div></li></ol>
         <p class="m-terms" id="mTerms" hidden></p>
       </div>
     </div>
@@ -252,7 +252,7 @@ function showJoined(token){
   $('#mJoin').hidden = false; $('#mForm').hidden = true;
   const box = $('#mOk');
   box.innerHTML = `<strong>You're a member.</strong>
-    <p>Your card is saved. Nothing was charged today. We'll text you a confirmation with a link to cancel anytime.</p>
+    <p>Your card is saved. Nothing was charged today. We'll email you a link to cancel anytime, and text you a confirmation.</p>
     <p>Book your detail whenever you're ready. As a member you don't pay the booking deposit for your plan's detail.</p>
     <div class="cta"><a class="btn btn-gold" href="../#book">${CAL}Book my detail</a><a class="btn btn-ghost" href="tel:${M.TEL}">${PHONE_IC}Call</a></div>
     ${token ? '<button type="button" class="m-link" id="mCancelMine">Changed your mind? Cancel your membership</button>' : ''}`;

@@ -168,7 +168,7 @@ maintenance membership: pick a plan, give the tail number, make and model and ho
 save a card on Stripe (nothing charged). The dashboard charges the plan price after the first
 job each month that the plan covers and is marked done; no covered job that month, no charge,
 and anything else is quoted and paid like normal. Members skip the booking deposit on their
-plan's detail, and the confirmation text has a cancel link to `membership/?cancel=...`.
+plan's detail, and the welcome email (never a text) has a cancel link to `membership/?cancel=...`.
 
 - **Plans, prices and the services each covers come from his AnointedSuds dashboard** (Settings > Membership plans), read
   from `/api/public/membership/anointedsuds`. This is the one place on the site with prices,
