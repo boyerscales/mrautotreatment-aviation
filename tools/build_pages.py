@@ -406,7 +406,8 @@ def main():
     write(ROOT / 'services' / 'index.html', services_index())
     write(ROOT / 'about' / 'index.html', about_page())
     urls = ([SITE + '/', SITE + '/services/'] + [f"{SITE}/services/{s['slug']}/" for s in SERVICES] + [SITE + '/about/']
-            + [f"{SITE}/aircraft-detailing/{a['slug']}/" for a in AIRPORTS])
+            + [f"{SITE}/aircraft-detailing/{a['slug']}/" for a in AIRPORTS]
+            + [SITE + '/privacy/', SITE + '/terms/'])
     (ROOT / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + ''.join(f'  <url><loc>{u}</loc></url>\n' for u in urls) + '</urlset>\n')
     (ROOT / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n')
