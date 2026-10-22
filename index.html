@@ -656,8 +656,7 @@ input[type=datetime-local].inp{color-scheme:dark}
       <h1 class="disp rv" style="--d:1">Sacramento's trusted <em>aircraft detailer</em></h1>
       <p class="lead rv" style="--d:2">Aircraft cleaning and detailing at SAC, MHR, MCC and beyond. Cabins, exteriors and carpet, done right on the ramp or in your hangar.</p>
       <div class="cta-row rv" style="--d:3">
-        <a class="btn btn-gold" data-tel href="tel:+19166780105"><svg class="i"><use href="#i-phone"/></svg>Call now</a>
-        <a class="btn btn-ghost" href="#book"><svg class="i"><use href="#i-cal"/></svg>Book a service</a>
+        <a class="btn btn-gold" href="#book"><svg class="i"><use href="#i-cal"/></svg>Book a service</a>
       </div>
       <div class="hero-sub rv" style="--d:4">
         <a data-sms href="sms:+19166780105?&amp;body=Hi%20AnointedSuds%2C%20I&#x27;d%20like%20a%20quote%20on%20a%20detail.%20Tail%20number%3A%20"><svg class="i"><use href="#i-msg"/></svg>Text us</a><span class="sep sep-w"></span><a class="walk" href="#tour"><svg class="i"><use href="#i-down"/></svg>Take the walkaround</a>
@@ -972,7 +971,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     <aside class="book-aside">
       <span class="eye rv">Book online</span>
       <h2 class="disp rv" style="--d:1;margin-top:18px">Need aircraft detailing in <em>Sacramento?</em></h2>
-      <p class="lead rv" style="--d:2">Pick a service, your airport and a time. A deposit holds your spot, and we call you with your quote before the job.</p>
+      <p class="lead rv" style="--d:2">Pick your aircraft, airport and a time, then tell us what you need. A deposit holds your spot, and we call you with your quote before the job.</p>
       <ul class="rv" style="--d:3">
         <li><svg class="i"><use href="#i-check"/></svg><span>No prices to guess. We quote your aircraft by phone.</span></li>
         <li><svg class="i"><use href="#i-lock"/></svg><span id="asideDeposit">A deposit holds your time and goes toward your total.</span></li>
@@ -984,17 +983,8 @@ input[type=datetime-local].inp{color-scheme:dark}
     <div class="panel rv" style="--d:1">
       <form id="bookForm" novalidate>
       <div id="picker">
-        <fieldset class="blk">
-          <legend class="vh">Service requested</legend>
-          <div class="blk-h" aria-hidden="true"><span class="k">1</span><b>Service requested</b></div>
-          <div class="seg two" id="segService"><label class="opt sel" data-svc="interior">
-      <input class="vh" type="radio" name="service" value="interior" checked="">Interior Cabin Detail<small>Full cabin vacuum, Seats and armrests cleaned, Tray tables and work surfaces</small></label><label class="opt" data-svc="exterior">
-      <input class="vh" type="radio" name="service" value="exterior">Exterior Dry Wash<small>Complete exterior dry wash, Bugs and ramp grime removed, Leading edges cleaned</small></label><label class="opt" data-svc="carpet">
-      <input class="vh" type="radio" name="service" value="carpet">Carpet Shampoo &amp; Extraction<small>Carpet condition check, Full vacuum, Stain pre-treatment</small></label><label class="opt" data-svc="full">
-      <input class="vh" type="radio" name="service" value="full">Full Detail, Inside &amp; Out<small>Cabin, exterior and carpet</small></label></div>
-        </fieldset>
         <div class="blk">
-          <div class="blk-h"><span class="k">2</span><b>Aircraft</b><small>helps us quote</small></div>
+          <div class="blk-h"><span class="k">1</span><b>Aircraft</b><small>helps us quote</small></div>
           <div class="seg five" id="segSize"><button type="button" class="opt size" data-size="piston" aria-pressed="false">
       <svg viewBox="0 0 100 100" style="transform:scale(0.62)" aria-hidden="true"><use href="#prop"></use></svg>Piston<small>Cirrus, Bonanza</small></button><button type="button" class="opt size" data-size="turboprop" aria-pressed="false">
       <svg viewBox="0 0 100 100" style="transform:scale(0.78)" aria-hidden="true"><use href="#tprop"></use></svg>Turboprop<small>King Air, PC-12</small></button><button type="button" class="opt size sel" data-size="light" aria-pressed="true">
@@ -1003,19 +993,19 @@ input[type=datetime-local].inp{color-scheme:dark}
       <svg viewBox="0 0 100 100" style="transform:scale(1)" aria-hidden="true"><use href="#jet"></use></svg>Large cabin<small>Gulfstream, Global</small></button></div>
         </div>
         <div class="blk">
-          <div class="blk-h"><span class="k">3</span><b>Airport</b></div>
+          <div class="blk-h"><span class="k">2</span><b>Airport</b></div>
           <select class="inp" id="bApt" name="airport" aria-label="Airport"><option value="SAC">SAC · Sacramento Executive</option><option value="MHR">MHR · Sacramento Mather</option><option value="MCC">MCC · McClellan Airfield</option><option value="LHM">LHM · Lincoln Regional</option><option value="AUN">AUN · Auburn Municipal</option><option value="DWA">DWA · Yolo County</option><option value="EDU">EDU · University Airport</option><option value="other">Somewhere else</option></select>
           <div class="field" id="bAptOtherF" hidden style="margin:10px 0 0"><label for="bAptOther">Which airport?</label><input class="inp" id="bAptOther" name="airport_other" placeholder="Name or code" autocomplete="off"></div>
         </div>
         <div class="blk" style="margin-bottom:6px">
-          <div class="blk-h"><span class="k">4</span><b>Day and time</b><small id="hoursNote"></small></div>
+          <div class="blk-h"><span class="k">3</span><b>Day and time</b><small id="hoursNote"></small></div>
           <div class="days" id="days" role="group" aria-label="Day"></div>
           <div class="slots" id="slots" role="group" aria-label="Time"></div>
         </div>
       </div>
 
         <div id="step2" hidden>
-          <div class="blk-h" style="margin-top:22px"><span class="k">5</span><b>Your details</b></div>
+          <div class="blk-h" style="margin-top:22px"><span class="k">4</span><b>Your details</b></div>
           <div class="picked"><span id="pickedText"></span><button type="button" id="changeTime">Change</button></div>
           <div class="row2">
             <div class="field"><label for="bName">Name</label><input class="inp" id="bName" name="name" autocomplete="name" placeholder="First and last name"></div>
@@ -1035,6 +1025,7 @@ input[type=datetime-local].inp{color-scheme:dark}
           <div class="field"><label>Also interested in</label><div class="chips" id="bExtras"><label class="chip"><input type="checkbox" value="Ceramic coating"><span>Ceramic coating</span></label><label class="chip"><input type="checkbox" value="Brightwork and metal polish"><span>Brightwork and metal polish</span></label><label class="chip"><input type="checkbox" value="Paint correction"><span>Paint correction</span></label><label class="chip"><input type="checkbox" value="Belly and gear degreasing"><span>Belly and gear degreasing</span></label><label class="chip"><input type="checkbox" value="Exhaust soot removal"><span>Exhaust soot removal</span></label><label class="chip"><input type="checkbox" value="Leather care"><span>Leather care</span></label><label class="chip"><input type="checkbox" value="De-ice residue removal"><span>De-ice residue removal</span></label></div></div>
           <div class="field"><label for="bNotes">Anything we should know?</label><textarea class="inp" id="bNotes" name="notes" rows="3" placeholder="Gate code, problem spots, last time it was detailed"></textarea></div>
           </div>
+          <div class="field"><label for="bReq">Service requested</label><textarea class="inp" id="bReq" name="service_request" rows="6" maxlength="300" placeholder="Tell us what you need: interior, exterior, carpet, a full detail, or anything else."></textarea></div>
           <div class="sum" id="sum"></div>
           <button class="btn btn-gold sub-btn" id="bookBtn" type="submit"></button>
           <p class="err" id="bookErr" role="alert"></p>
@@ -1074,8 +1065,7 @@ input[type=datetime-local].inp{color-scheme:dark}
     <h2 class="disp rv" style="--d:1">Clean airplane, <em>on time</em></h2>
     <p class="lead rv" style="--d:2">Call for a quote, or book your time online in under a minute.</p>
     <div class="cta-row rv" style="--d:3">
-      <a class="btn btn-gold" data-tel href="tel:+19166780105"><svg class="i"><use href="#i-phone"/></svg>Call now</a>
-      <a class="btn btn-ghost" href="#book"><svg class="i"><use href="#i-cal"/></svg>Book a service</a>
+      <a class="btn btn-gold" href="#book"><svg class="i"><use href="#i-cal"/></svg>Book a service</a>
     </div>
   </div>
 </section>
@@ -1505,11 +1495,9 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   });
   $('#bExtras').innerHTML = CFG.MORE.slice(0, 7).map(([n]) => `<label class="chip"><input type="checkbox" value="${esc(n)}"><span>${esc(n)}</span></label>`).join('');
 
-  function renderServices(){
-    $('#segService').innerHTML = CHOICES.map(s => `<label class="opt${s.id === service.id ? ' sel' : ''}" data-svc="${s.id}">
-      <input class="vh" type="radio" name="service" value="${s.id}"${s.id === service.id ? ' checked' : ''}>${esc(s.label)}<small>${esc(s.sub || s.incl.slice(0, 3).join(', '))}</small></label>`).join('');
-    $$('#segService input').forEach(r => r.addEventListener('change', () => choose(r.value)));
-  }
+  // No service picker on the form: the customer types what they need in "Service requested".
+  // A "Book this" link still sets which service books the time (and its length), and fills the box.
+  const req = $('#bReq');
   function renderSizes(){
     $('#segSize').innerHTML = CFG.SIZES.map(z => `<button type="button" class="opt size${z.id === size ? ' sel' : ''}" data-size="${z.id}" aria-pressed="${z.id === size}">
       <svg viewBox="0 0 100 100" style="transform:scale(${z.scale})" aria-hidden="true"><use href="#${z.icon}"/></svg>${esc(z.label)}<small>${esc(z.sub)}</small></button>`).join('');
@@ -1524,8 +1512,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     if (!hit) return;
     const longer = mins(hit) !== mins(service);
     service = hit;
-    $$('#segService .opt').forEach(x => x.classList.toggle('sel', x.dataset.svc === id));
-    $$('#segService input').forEach(x => x.checked = x.value === id);
+    if (!req.value.trim()) req.value = hit.label;
     if (longer){ picked = null; step2.hidden = true; renderDays(); }
     else renderPicked();
     renderSum();
@@ -1559,7 +1546,6 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   function renderSum(){
     const z = sizeOf(size);
     $('#sum').innerHTML = `
-      <div><span>Service</span><b>${esc(service.label)}</b></div>
       <div><span>Aircraft</span><b>${esc(z.label)}</b></div>
       <div><span>Airport</span><b>${esc(aptText())}</b></div>
       <div><span>Price</span><b>We call you with a quote</b></div>
@@ -1576,8 +1562,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   }
   function renderPicked(){
     if (!picked) return;
-    $('#pickedText').textContent = `${service.short} · ` +
-      picked.date.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'}) + ' at ' + picked.text;
+    $('#pickedText').textContent = picked.date.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'}) + ' at ' + picked.text;
   }
   function hoursNote(){
     const open = Object.values(cfg.hours).filter(Boolean);
@@ -1703,7 +1688,8 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     const err = $('#bookErr'); err.textContent = '';
     const v = id => $(id).value.trim();
     const name = v('#bName'), phone = v('#bPhone'), tail = v('#bTail').toUpperCase(), type = v('#bType'),
-          email = v('#bEmail'), fbo = v('#bFbo'), notes = v('#bNotes'), wheels = $('#bWheels').value;
+          email = v('#bEmail'), fbo = v('#bFbo'), notes = v('#bNotes'), wheels = $('#bWheels').value,
+          request = v('#bReq').replace(/\s+/g, ' ');
     const extras = $$('#bExtras input:checked').map(x => x.value);
     const fail = (msg, sel) => { err.textContent = msg; const el = sel && $(sel); if (el) el.focus(); return false; };
     if (!picked)                       return fail('Pick a day and a time first.');
@@ -1712,6 +1698,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     if (!/^[A-Z0-9][A-Z0-9-]{1,9}$/.test(tail)) return fail('What\'s the tail number? Like N123AB.', '#bTail');
     if ($('#bApt').value === 'other' && !v('#bAptOther')) return fail('Which airport is it parked at?', '#bAptOther');
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('That email doesn\'t look right. Leave it blank if you like.', '#bEmail');
+    if (request.length < 3)            return fail('Tell us what service you need.', '#bReq');
     if (picked.date.getTime() < Date.now() + cfg.leadHours*3600000){
       renderDays(true); drawn = drawing();
       daysEl.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block:'center' });
@@ -1720,14 +1707,14 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     const z = sizeOf(size), apt = aptText();
     const wheelsTxt = wheels ? new Date(wheels).toLocaleString('en-US',{ weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }) : '';
     // The dashboard keeps one notes field (300 chars) and one address (160), so the
-    // aviation details ride there. Customer notes go last, so they're what gets cut.
-    const noteParts = [`Tail ${tail}`, type, z.label, wheelsTxt && `Takeoff ${wheelsTxt}`, email && `Email ${email}`,
+    // aviation details ride there. The service request goes first; customer notes go last, so they're what gets cut.
+    const noteParts = [`Service requested: ${request}`, `Tail ${tail}`, type, z.label, wheelsTxt && `Takeoff ${wheelsTxt}`, email && `Email ${email}`,
                        extras.length && `Also asked about: ${extras.join(', ')}`, 'Needs a quote', notes].filter(Boolean);
     const body = { name, phone, start:picked.key, mode:'mobile',
                    vehicle: [tail, type].filter(Boolean).join(' · '), vehicle_size: z.label,
                    address: [apt, fbo].filter(Boolean).join(' · ').slice(0, 160),
                    notes: noteParts.join(' · ').slice(0, 300),
-                   service_id: service.id, service: service.label };
+                   service_id: service.id, service: request.slice(0, 80) };
     const btn = $('#bookBtn');
     btn.disabled = true; btn.textContent = dep ? 'Holding your time…' : 'Booking…';
     let ok = true, checkout = '', refused = false;
@@ -1757,7 +1744,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     box.innerHTML = `<svg class="seal" aria-hidden="true"><use href="#mark"/></svg>
       <strong>Thanks, ${esc(first.charAt(0).toUpperCase() + first.slice(1))}.</strong>
       <span class="when">${picked.date.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'})} at ${picked.text}</span>
-      <span>${esc(service.label)} · ${esc(tail)}${type ? ' · ' + esc(type) : ''}<br>${esc(apt)}${fbo ? ' · ' + esc(fbo) : ''}</span>
+      <span>${esc(request.slice(0, 80))} · ${esc(tail)}${type ? ' · ' + esc(type) : ''}<br>${esc(apt)}${fbo ? ' · ' + esc(fbo) : ''}</span>
       <div class="pay"><b>${dep ? 'Your deposit link is on its way.' : 'Nothing to pay now.'}</b>We'll call ${esc(phone)} to confirm your time and give you your quote.</div>
       Need to change something? Call or text <a href="tel:${CFG.PHONE_E164}" style="color:var(--gold);font-weight:700">${CFG.PHONE_TEXT}</a>.
       ${live ? '' : '<span class="pv">Preview mode: this booking was not saved and nothing was sent.</span>'}`;
@@ -1765,7 +1752,7 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
     box.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block:'center' });
   });
 
-  renderServices(); renderSizes(); renderSum(); hoursNote();
+  renderSizes(); renderSum(); hoursNote();
   // the phone menu closes once a link in it is tapped, or on a tap anywhere else
   const mnav = $('#mnav');
   mnav.addEventListener('click', ev => { if (ev.target.closest('a')) mnav.open = false; });
@@ -1774,8 +1761,8 @@ $$('.pin').forEach(p => p.addEventListener('click', () => {
   if (svcOf(qs.get('svc'))) choose(qs.get('svc'));
   if (qs.get('tail')) tl.value = qs.get('tail').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 10);
   if (qs.get('takeoff')) $('#bWheels').value = qs.get('takeoff');
-  if (qs.get('service')) $('#bNotes').value = qs.get('service').slice(0, 300);
-  if (qs.get('takeoff') || qs.get('service')){ $('#moreToggle').setAttribute('aria-expanded', 'true'); $('#moreFields').hidden = false; }
+  if (qs.get('service')) req.value = qs.get('service').slice(0, 300);
+  if (qs.get('takeoff')){ $('#moreToggle').setAttribute('aria-expanded', 'true'); $('#moreFields').hidden = false; }
   const want = (new URLSearchParams(location.search).get('apt') || '').toUpperCase();
   selectAirport(aptOf(want) ? want : 'SAC', false);
   load();
