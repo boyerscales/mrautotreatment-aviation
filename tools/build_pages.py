@@ -184,7 +184,8 @@ def shell(up, title, desc, url, ld, main, book, sms_body, svc=None, apt=None):
 <meta property="og:type" content="website">
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
-<meta property="og:image" content="{up}assets/og.jpg">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{SITE}/assets/og.jpg">
 <link rel="icon" type="image/svg+xml" href="{up}assets/mark.svg">
 <link rel="apple-touch-icon" href="{up}assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">

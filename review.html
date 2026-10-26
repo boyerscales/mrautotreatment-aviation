@@ -76,7 +76,7 @@ h1{font-size:30px;line-height:1.08;font-weight:600;letter-spacing:-.03em;margin:
 <a class="top" href="/"><img src="/assets/logo-180.png" alt="" width="56" height="56"><span>AnointedSuds Aviation Detailing</span></a>
 <main>
   <h1>How did we do?</h1>
-  <p class="lead">Thanks for trusting AnointedSuds with your aircraft. A quick Google review takes about 30 seconds and helps a small business more than you'd think.</p>
+  <p class="lead" id="lead">Thanks for trusting AnointedSuds with your aircraft. A quick Google review takes about 30 seconds and helps a small business more than you'd think.</p>
   <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
   <a class="btn btn-acc" id="go" href="#" rel="noopener" hidden>Leave a Google review</a>
   <p class="help">Questions? Call or text <a href="tel:+19166780105">(916) 678-0105</a>.</p>
@@ -84,11 +84,16 @@ h1{font-size:30px;line-height:1.08;font-weight:600;letter-spacing:-.03em;margin:
 <script>
 // The Google link comes from the dashboard Settings, so it stays current without a redeploy.
 const SITE = {"slug": "anointedsuds", "api": "https://dashboard.boyerscales.com", "url": ""};
+// No Google link saved yet: the button texts us instead, so the page never dead-ends.
+const go = document.getElementById('go');
+const show = (url) => {
+  if (url){ go.href = url; }
+  else { go.href = "sms:+19166780105?&body=" + encodeURIComponent("Hi AnointedSuds, here's how you did: "); go.textContent = "Text us how we did"; document.getElementById('lead').textContent = "Thanks for trusting AnointedSuds with your aircraft. Tell us how the job went. It takes a few seconds and helps us more than you'd think."; }
+  go.hidden = false;
+};
 fetch(`${SITE.api}/api/public/review/${SITE.slug}`).then(r => r.ok ? r.json() : null).then(j => {
-  const url = (j && /^https:\/\//.test(j.url || '')) ? j.url : SITE.url;
-  const go = document.getElementById('go');
-  if (url){ go.href = url; go.hidden = false; }
-}).catch(() => {});
+  show((j && /^https:\/\//.test(j.url || '')) ? j.url : SITE.url);
+}).catch(() => show(SITE.url));
 </script>
 </body>
 </html>
