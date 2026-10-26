@@ -13,7 +13,7 @@
 
 Edit the lists below, then re-run. Keep SERVICES in step with CFG.SERVICES in index.html. Before launch: set SITE to the real domain and NOINDEX = False.
 """
-import html, json, pathlib, urllib.parse
+import datetime, html, json, pathlib, subprocess, urllib.parse
 
 SITE = 'https://www.anointedsuds.com'
 NOINDEX = False                             # live on www.anointedsuds.com, let Google index it
@@ -398,6 +398,12 @@ def write(path, text):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text)
 
+def lastmod(url):
+    # Date the page last changed in git, so Google recrawls pages that changed (it trusts accurate lastmod)
+    f = url[len(SITE) + 1:] + 'index.html'
+    d = subprocess.run(['git', 'log', '-1', '--format=%cs', '--', f], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    return d or datetime.date.today().isoformat()
+
 def main():
     for a in AIRPORTS:
         write(ROOT / 'aircraft-detailing' / a['slug'] / 'index.html', airport_page(a))
@@ -409,7 +415,7 @@ def main():
             + [f"{SITE}/aircraft-detailing/{a['slug']}/" for a in AIRPORTS]
             + [SITE + '/privacy/', SITE + '/terms/'])
     (ROOT / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + ''.join(f'  <url><loc>{u}</loc></url>\n' for u in urls) + '</urlset>\n')
+        + ''.join(f'  <url><loc>{u}</loc><lastmod>{lastmod(u)}</lastmod></url>\n' for u in urls) + '</urlset>\n')
     (ROOT / 'robots.txt').write_text(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n')
     print(f'{len(AIRPORTS)} airport pages, {len(SERVICES)} service pages + services index, about page, sitemap.xml, robots.txt')
 
